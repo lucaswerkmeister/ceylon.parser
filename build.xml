@@ -1,0 +1,148 @@
+<project name="Ceylon Lexer" basedir="." default="test">
+    
+    <property file="build.properties"/>
+    <property name="ceylon.verbosity" value="false"/>
+    <property name="ceylon.executable" value="${dist.bin.dir}/ceylon"/>
+    <property name="out.repo" location="modules"/>
+    
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${dist.root.dir}/lib/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+    
+    <taskdef resource="taskdef.properties">
+        <classpath>
+            <pathelement path="${dist.root.dir}/osgi/lib/org.osgi.impl.bundle.repoindex.ant-2.1.2.jar"/>
+        </classpath>
+    </taskdef>
+    
+    <property name="ceylon.repo.dir" location="${user.home}/.ceylon/repo"/>
+    
+    <path id="ant-tasks">
+        <pathelement location="${ceylon.ant.lib}"/>
+    </path>
+    
+    <typedef resource="com/redhat/ceylon/ant/antlib.xml" classpathref="ant-tasks"/>
+    
+    
+    <moduleset id="modules.source.core">
+        <module name="ceylon.lexer.core"/>
+    </moduleset>
+    
+    <moduleset id="modules.source">
+        <moduleset refid="modules.source.core"/>
+    </moduleset>
+    
+    <moduleset id="modules.test.core">
+        <module name="test.ceylon.lexer.core"/>
+    </moduleset>
+    
+    <moduleset id="modules.test">
+        <moduleset refid="modules.test.core"/>
+    </moduleset>
+    
+    <moduleset id="modules.all">
+        <moduleset refid="modules.source"/>
+        <moduleset refid="modules.test"/>
+    </moduleset>
+    
+    
+    <target name="clean"
+            description="Deletes the modules directory">
+        <delete dir="${out.repo}"/>
+    </target>
+    
+    <target name="compile-core"
+            description="Compiles the Ceylon Lexer core module">
+        <ceylon-compile executable="${ceylon.executable}"
+            verbose="${ceylon.verbosity}"
+            encoding="UTF-8"
+            out="${out.repo}"
+            pack200="true">
+            <moduleset refid="modules.source.core"/>
+        </ceylon-compile>
+    </target>
+    
+    <target name="compile-source"
+            description="Compiles the Ceylon Lexer source modules">
+        <ceylon-compile executable="${ceylon.executable}"
+            verbose="${ceylon.verbosity}"
+            encoding="UTF-8"
+            out="${out.repo}"
+            pack200="true">
+            <moduleset refid="modules.source"/>
+        </ceylon-compile>
+    </target>
+    
+    <target name="compile-test-core" depends="compile-core"
+            description="Compiles the Ceylon Lexer core module">
+        <ceylon-compile executable="${ceylon.executable}"
+            verbose="${ceylon.verbosity}"
+            encoding="UTF-8"
+            out="${out.repo}"
+            pack200="true">
+            <moduleset refid="modules.test.core"/>
+        </ceylon-compile>
+    </target>
+    
+    <target name="compile-test" depends="compile-source"
+            description="Compiles the Ceylon Lexer test modules">
+        <ceylon-compile executable="${ceylon.executable}"
+            verbose="${ceylon.verbosity}"
+            encoding="UTF-8"
+            out="${out.repo}"
+            pack200="true">
+            <moduleset refid="modules.test"/>
+        </ceylon-compile>
+    </target>
+    
+    <target name="compile" depends="compile-source"
+            description="Compiles all the Ceylon Lexer modules">
+        <ceylon-compile executable="${ceylon.executable}"
+            verbose="${ceylon.verbosity}"
+            encoding="UTF-8"
+            out="${out.repo}"
+            pack200="true">
+            <moduleset refid="modules.all"/>
+        </ceylon-compile>
+    </target>
+    
+    <target name="test-core" depends="compile-test-core"
+            description="Tests the Ceylon Lexer core module">
+        <ceylon-test>
+            <moduleset refid="modules.test.core"/>
+        </ceylon-test>
+    </target>
+    
+    <target name="test" depends="compile"
+            description="Tests the Ceylon Lexer">
+        <ceylon-test>
+            <moduleset refid="modules.test"/>
+        </ceylon-test>
+    </target>
+
+    <target name="doc" 
+            description="Documents the Ceylon Lexer modules">
+        <ceylon-doc executable="${ceylon.executable}"
+            includesourcecode="true"
+            nomtimecheck="true"
+            out="${out.repo}"
+            encoding="UTF-8">
+            <moduleset refid="modules.source"/>
+            <linkset>
+                <link pattern="ceylon" url="https://modules.ceylon-lang.org/repo/1/"/>
+            </linkset>
+        </ceylon-doc>
+    </target>
+    
+    <target name="publish" depends="compile-source"
+            description="Copies the Ceylon Lexer modules to the user's repository">
+        <copy todir="${ceylon.repo.dir}" overwrite="true">
+            <fileset dir="${out.repo}">
+                <include name="ceylon/lexer/**"/>
+            </fileset>
+        </copy>
+    </target>
+
+</project>
