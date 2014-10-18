@@ -2,10 +2,10 @@
    
    Typical usage can look like this:
    
-       if (cs.peek(1) == 't',
-           cs.peek(2) == 'r',
-           cs.peek(3) == 'y'
-           !isIdentifierPart(cs.peek(4))) {
+       if (cs.peek(0) == 't',
+           cs.peek(1) == 'r',
+           cs.peek(2) == 'y',
+           !isIdentifierPart(cs.peek(3))) {
            
            cs.consume("try".size);
            // ...
