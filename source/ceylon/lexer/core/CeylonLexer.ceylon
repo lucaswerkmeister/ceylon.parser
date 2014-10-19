@@ -1,5 +1,44 @@
-"A Lexer for the Ceylon programming language,
- turning a stream of [[characters]] into a stream of tokens."
+"""A Lexer for the Ceylon programming language,
+   turning a stream of [[characters]] into a stream of tokens.
+   
+   ### A note on character and string literals
+   
+   This lexer deviates *slightly* from the behavior
+   of the official Ceylon compiler in that escape sequences
+   for character and string literals may not contain quotes.
+   For example, the Ceylon compiler will parse these as single literals:
+   
+       '\{FICTITIOUS CHARACTER WITH ' IN NAME}'
+       "String containing \{FICTITIOUS CHARACTER WITH " IN NAME}"
+   
+   because its grammar has separate rules for these escape sequences
+   and doesn’t exit them until encountering the closing brace;
+   this lexer simply terminates the literal
+   on the first matching unescaped quote.
+   
+   This is okay because the [Ceylon 1.1 language specification][Ceylon1.1],
+   2.4.2 “Character literals”,
+   defines these escape sequences like this:
+   
+   > ~~~antlr
+   > EscapeSequence: "\" (SingleCharacterEscape | "{" CharacterCode "}")
+   > ~~~
+   > ~~~antlr
+   > CharacterCode: "#" ( HexDigit{4} | HexDigit{8} ) | UnicodeCharacterName
+   > ~~~
+   > 
+   > Legal Unicode character names are defined by the Unicode specification.
+   
+   And per the [Unicode 7.0.0 specification][Unicode7],
+   4.8 “Name”, a Unicode character name
+   may contain only a certain set of characters,
+   which does not include quotes.
+   
+   Therefore, any program that is lexed differently because of this deviation
+   cannot be a legal one.
+   
+   [Ceylon1.1]: http://ceylon-lang.org/documentation/1.1/spec/
+   [Unicode7]: http://www.unicode.org/versions/Unicode7.0.0/"""
 shared class CeylonLexer(CharacterStream characters) {
     
     value terminator = '\{PRIVATE USE ONE}';
