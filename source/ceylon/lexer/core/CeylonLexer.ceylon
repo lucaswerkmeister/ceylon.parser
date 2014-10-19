@@ -195,6 +195,28 @@ shared class CeylonLexer(CharacterStream characters) {
                     // TODO backtick
                 }
             }
+            case ('\'') {
+                // character literal
+                characters.consume();
+                StringBuilder text = StringBuilder();
+                text.appendCharacter('\'');
+                while ((next = characters.peek()) != '\'') {
+                    if (next == terminator) { break; }
+                    text.appendCharacter(next);
+                    characters.consume();
+                    if (next == '\\') {
+                        text.appendCharacter(characters.peek());
+                        characters.consume();
+                    }
+                }
+                if (next == terminator) {
+                    // TODO error
+                } else {
+                    text.appendCharacter('\'');
+                    characters.consume();
+                    return token(characterLiteral, text.string);
+                }
+            }
             else {
                 if (isIdentifierStart(next)) {
                     characters.consume();
