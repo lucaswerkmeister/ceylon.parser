@@ -1,5 +1,5 @@
 shared abstract class TokenType(string)
-        of IgnoredType | IdentifierType {
+        of IgnoredType | IdentifierType | LiteralType {
     shared actual String string;
 }
 
@@ -47,3 +47,52 @@ shared object lidentifier extends IdentifierType("lidentifier") {}
        Object
        \Iklass"""
 shared object uidentifier extends IdentifierType("uidentifier") {}
+
+"A literal value token."
+shared abstract class LiteralType(String string)
+        of StringLiteralType | characterLiteral | NumericLiteralType
+        extends TokenType(string) {}
+
+shared abstract class StringLiteralType(String string)
+        of stringLiteral | verbatimStringLiteral | stringStart | stringMid | stringEnd
+        extends LiteralType(string) {}
+
+"""A regular string literal, for example:
+   
+       "Hello, World!"
+       "The Ceylon mascot is Trompon the \{ELEPHANT}.""""
+shared object stringLiteral extends StringLiteralType("stringLiteral") {}
+
+"A verbatim string literal without escape sequences, for example:
+ 
+     \"\"\"He said, \"Hello, World!\"\"\"\""
+shared object verbatimStringLiteral extends StringLiteralType("verbatimStringLiteral") {}
+
+"""A string literal that occurs at the beginning of a string template,
+   i. e. ends with two backticks instead of a quote, for example:
+   
+       "Hello, ``"""
+shared object stringStart extends StringLiteralType("stringStart") {}
+
+"""A string literal that occurs in the middle of a string template,
+   i. e. begins and ends with two backticks instead of a quote, for example:
+   
+       ``, and welcome to ``"""
+shared object stringMid extends StringLiteralType("stringMid") {}
+
+"""A string literal that occurs at the end of a string template,
+   i. e. begins with two backticks instead of a quote, for example:
+   
+       ``!""""
+shared object stringEnd extends StringLiteralType("stringEnd") {}
+
+"A character literal, for example:
+ 
+     'c'
+     '\\{LATIN SMALL LETTER C}'"
+shared object characterLiteral extends LiteralType("characterLiteral") {}
+
+"A numeric literal."
+shared abstract class NumericLiteralType(String string)
+// TODO case types
+        extends LiteralType(string) {}
