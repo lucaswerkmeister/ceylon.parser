@@ -3,17 +3,17 @@ import ceylon.lexer.core {
     StringCharacterStream,
     Token,
     TokenType,
+    characterLiteral,
     lidentifier,
     lineComment,
     multiComment,
-    uidentifier,
-    whitespace,
-    stringLiteral,
-    verbatimStringLiteral,
-    stringStart,
-    stringMid,
     stringEnd,
-    characterLiteral
+    stringLiteral,
+    stringMid,
+    stringStart,
+    uidentifier,
+    verbatimStringLiteral,
+    whitespace
 }
 import ceylon.test {
     test,
