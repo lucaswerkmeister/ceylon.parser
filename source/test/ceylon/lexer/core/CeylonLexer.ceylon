@@ -12,7 +12,8 @@ import ceylon.lexer.core {
     verbatimStringLiteral,
     stringStart,
     stringMid,
-    stringEnd
+    stringEnd,
+    characterLiteral
 }
 import ceylon.test {
     test,
@@ -140,6 +141,18 @@ shared class CeylonLexerTest() {
         "\`\`, and welcome to \`\`"->stringMid,
         "\"\"\"here\"\"\""->verbatimStringLiteral,
         "\`\`!\""->stringEnd);
+    
+    test
+    shared void simpleCharacterLiteral()
+            => singleToken("""'c'""", characterLiteral, "Simple character literal");
+    
+    test
+    shared void characterLiteralWithUnicodeEscape()
+            => singleToken("""'\{ELEPHANT}'""", characterLiteral, "Character literal with Unicode escape sequence");
+    
+    test
+    shared void characterLiteralWithQuote()
+            => singleToken("""'\''""", characterLiteral, "Character literal with escaped quote");
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
