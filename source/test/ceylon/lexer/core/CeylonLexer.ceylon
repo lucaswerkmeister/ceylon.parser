@@ -7,7 +7,12 @@ import ceylon.lexer.core {
     lineComment,
     multiComment,
     uidentifier,
-    whitespace
+    whitespace,
+    stringLiteral,
+    verbatimStringLiteral,
+    stringStart,
+    stringMid,
+    stringEnd
 }
 import ceylon.test {
     test,
@@ -95,6 +100,46 @@ shared class CeylonLexerTest() {
         "a"->lidentifier,
         " "->whitespace,
         "\\iSOUTH"->lidentifier);
+    
+    test
+    shared void simpleStringLiteral()
+            => singleToken(""""Hello, World!"""", stringLiteral, "Simple string literal");
+    
+    test
+    shared void stringLiteralWithEscapedQuote()
+            => singleToken(""""\"Hello, World!\", said Tom."""", stringLiteral, "String literal with escaped quote");
+    
+    test
+    shared void simpleVerbatimStringLiteral()
+            => singleToken("\"\"\"Hello, World!\"\"\"", verbatimStringLiteral, "Simple verbatim string literal");
+    
+    test
+    shared void verbatimStringLiteralWithQuotes()
+            => singleToken("\"\"\"\"\"Verbatim string literal _content_ can begin or end with up to two quotes\"\"\"\"\"", verbatimStringLiteral, "Verbatim string literal with quotes");
+    
+    test
+    shared void simpleStringStart()
+            => singleToken("\"Hello, \`\`", stringStart, "Simple string start");
+    
+    test
+    shared void simpleStringMid()
+            => singleToken("\`\`, and welcome to \`\`", stringMid, "Simple string mid");
+    
+    test
+    shared void simpleStringEnd()
+            => singleToken("\`\`!\"", stringEnd, "Simple string end");
+    
+    test
+    shared void stringTemplate()
+    /*
+     "Hello, ``"You"``, and welcome to ``"""here"""``!"
+     */
+            => multipleTokens("String template",
+        "\"Hello, \`\`"->stringStart,
+        "\"You\""->stringLiteral,
+        "\`\`, and welcome to \`\`"->stringMid,
+        "\"\"\"here\"\"\""->verbatimStringLiteral,
+        "\`\`!\""->stringEnd);
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
