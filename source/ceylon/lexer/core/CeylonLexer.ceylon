@@ -101,6 +101,100 @@ shared class CeylonLexer(CharacterStream characters) {
                     // TODO error
                 }
             }
+            case ('"') {
+                if (characters.peek(1) == '"' && characters.peek(2) == '"') {
+                    // verbatim string literal
+                    characters.consume(3);
+                    StringBuilder text = StringBuilder();
+                    text.append("\"\"\"");
+                    while ((next = characters.peek()) != '"'
+                                || characters.peek(1) != '"'
+                                || characters.peek(2) != '"') {
+                        if (next == terminator) { break; }
+                        text.appendCharacter(next);
+                        characters.consume();
+                    }
+                    if (next == terminator) {
+                        // TODO error
+                    } else {
+                        // next three characters are """
+                        if (characters.peek(3) == '"') {
+                            // """""""" is a verbatim string containing two quotes
+                            text.appendCharacter('"');
+                            characters.consume();
+                            if (characters.peek(3) == '"') {
+                                text.appendCharacter('"');
+                                characters.consume();
+                            }
+                        }
+                        characters.consume(3);
+                        text.append("\"\"\"");
+                        return token(verbatimStringLiteral, text.string);
+                    }
+                } else {
+                    // string literal or string start
+                    characters.consume();
+                    StringBuilder text = StringBuilder();
+                    text.appendCharacter('"');
+                    while ((next = characters.peek()) != '"'
+                                && (next != '`' || characters.peek(1) != '`')) {
+                        if (next == terminator) { break; }
+                        text.appendCharacter(next);
+                        characters.consume();
+                        if (next == '\\') {
+                            text.appendCharacter(characters.peek());
+                            characters.consume();
+                        }
+                    }
+                    if (next == terminator) {
+                        // TODO error
+                    } else {
+                        if (next == '"') {
+                            text.appendCharacter('"');
+                            characters.consume();
+                            return token(stringLiteral, text.string);
+                        } else {
+                            text.append("\`\`");
+                            characters.consume(2);
+                            return token(stringStart, text.string);
+                        }
+                    }
+                }
+            }
+            case ('`') {
+                if (characters.peek(1) == '`') {
+                    // string mid or string end
+                    characters.consume(2);
+                    StringBuilder text = StringBuilder();
+                    text.append("\`\`");
+                    while ((next = characters.peek()) != '"'
+                                && (next != '`' || characters.peek(1) != '`')) {
+                        if (next == terminator) { break; }
+                        text.appendCharacter(next);
+                        characters.consume();
+                        if (next == '\\') {
+                            text.appendCharacter(characters.peek());
+                            characters.consume();
+                        }
+                    }
+                    if (next == terminator) {
+                        // TODO error
+                    } else {
+                        if (next == '"') {
+                            text.appendCharacter('"');
+                            characters.consume();
+                            return token(stringEnd, text.string);
+                        } else {
+                            text.append("\`\`");
+                            characters.consume(2);
+                            return token(stringMid, text.string);
+                        }
+                    }
+                    
+                } else {
+                    // TODO backtick
+                }
+            }
             else {
                 if (isIdentifierStart(next)) {
                     characters.consume();
