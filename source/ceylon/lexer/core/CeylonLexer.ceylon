@@ -37,6 +37,19 @@
    Therefore, any program that is lexed differently because of this deviation
    cannot be a legal one.
    
+   ### A note on numeric literals
+   
+   This lexer is slightly more permissive than the grammar from the
+   [Ceylon 1.1 language specification][Ceylon1.1] concerning numeric literals;
+   it does not enforce
+   
+   - nonemptiness of exponents (i. e., `1.5E` and `1.5E+` are lexed as legal
+     float literals), and
+   - correct grouping of underscores (i. e., `1_000_00.0000_0` is lexed as
+     a legal float literal).
+   
+   If desired, they need to be checked at a later stage of compilation.
+   
    [Ceylon1.1]: http://ceylon-lang.org/documentation/1.1/spec/
    [Unicode7]: http://www.unicode.org/versions/Unicode7.0.0/"""
 shared class CeylonLexer(CharacterStream characters) {
@@ -277,6 +290,79 @@ shared class CeylonLexer(CharacterStream characters) {
                     text.appendCharacter('\'');
                     characters.consume();
                     return token(characterLiteral, text.string);
+                }
+            }
+            case ('0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9') {
+                // numeric literal, we don’t know yet which kind
+                characters.consume();
+                StringBuilder text = StringBuilder();
+                text.appendCharacter(next);
+                while ('0' <= (next = characters.peek()) <= '9'
+                            || next == '_') {
+                    text.appendCharacter(next);
+                    characters.consume();
+                }
+                switch (next = characters.peek())
+                case ('.') {
+                    // could be a float literal or a qualified expression
+                    if ('0' <= characters.peek(1) <= '9'
+                                || next == '_') {
+                        // float literal
+                        text.appendCharacter('.');
+                        characters.consume();
+                        while ('0' <= (next = characters.peek()) <= '9'
+                                    || next == '_') {
+                            text.appendCharacter(next);
+                            characters.consume();
+                        }
+                        // might also have an exponent or magnitude
+                        switch (next = characters.peek())
+                        case ('E' | 'e') {
+                            // exponent
+                            text.appendCharacter(next);
+                            characters.consume();
+                            if ((next = characters.peek()) == '-'
+                                        || next == '+') {
+                                text.appendCharacter(next);
+                                characters.consume();
+                            }
+                            while ('0' <= (next = characters.peek()) <= '9'
+                                        || next == '_') {
+                                text.appendCharacter(next);
+                                characters.consume();
+                            }
+                            return token(floatLiteral, text.string);
+                        }
+                        case ('k' | 'M' | 'G' | 'T' | 'P' | 'm' | 'u' | 'n' | 'p' | 'f') {
+                            // magnitude, we don’t care if it’s a regular or fractional one
+                            text.appendCharacter(next);
+                            characters.consume();
+                            return token(floatLiteral, text.string);
+                        }
+                        else {
+                            // belongs to the next token
+                            return token(floatLiteral, text.string);
+                        }
+                    } else {
+                        // qualified expression, don’t consume the member operator!
+                        return token(decimalLiteral, text.string);
+                    }
+                }
+                case ('k' | 'M' | 'G' | 'T' | 'P') {
+                    // regular magnitude
+                    text.appendCharacter(next);
+                    characters.consume();
+                    return token(decimalLiteral, text.string);
+                }
+                case ('m' | 'u' | 'n' | 'p' | 'f') {
+                    // fractional magnitude, shortcut float literal
+                    text.appendCharacter(next);
+                    characters.consume();
+                    return token(floatLiteral, text.string);
+                }
+                else {
+                    // belongs to the next token
+                    return token(decimalLiteral, text.string);
                 }
             }
             else {
