@@ -5,6 +5,8 @@ import ceylon.lexer.core {
     TokenType,
     binaryLiteral,
     characterLiteral,
+    decimalLiteral,
+    floatLiteral,
     hexLiteral,
     lidentifier,
     lineComment,
@@ -163,6 +165,42 @@ shared class CeylonLexerTest() {
     test
     shared void simpleBinaryLiteral()
             => singleToken("$10_1010", binaryLiteral, "Simple binary literal");
+    
+    test
+    shared void simpleDecimalLiteral()
+            => singleToken("42", decimalLiteral, "Simple decimal literal");
+    
+    test
+    shared void decimalLiteralWithMagnitude()
+            => singleToken("10k", decimalLiteral, "Decimal literal with magnitude");
+    
+    test
+    shared void decimalLiteralWithGrouping()
+            => singleToken("10_000", decimalLiteral, "Decimal literal with grouping");
+    
+    test
+    shared void simpleFloatLiteral()
+            => singleToken("3.141", floatLiteral, "Simple float literal");
+    
+    test
+    shared void floatLiteralWithMagnitude()
+            => singleToken("1.5M", floatLiteral, "Float literal with (regular) magnitude");
+    
+    test
+    shared void floatLiteralWithFractionalMagnitude()
+            => singleToken("1.5u", floatLiteral, "Float literal with fractional magnitude");
+    
+    test
+    shared void floatLiteralWithExponent()
+            => singleToken("6.022E+23", floatLiteral, "Float literal with exponent (Avogadro’s constant)");
+    
+    test
+    shared void shortcutFloatLiteral()
+            => singleToken("2u", floatLiteral, "Shortcut float literal with fractional magnitude");
+    
+    test
+    shared void floatLiteralWithGrouping()
+            => singleToken("1_234.567_8", floatLiteral, "Float literal with grouping");
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
