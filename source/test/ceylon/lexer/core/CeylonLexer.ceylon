@@ -21,7 +21,8 @@ import ceylon.lexer.core {
 }
 import ceylon.test {
     test,
-    assertEquals
+    assertEquals,
+    assertNull
 }
 
 shared class CeylonLexerTest() {
@@ -209,9 +210,8 @@ shared class CeylonLexerTest() {
             expected = Token(expectedType, input);
             message = message;
         };
-        assertEquals {
-            actual = lexer.nextToken();
-            expected = null;
+        assertNull {
+            lexer.nextToken();
             message = "No more tokens expected";
         };
     }
@@ -225,9 +225,8 @@ shared class CeylonLexerTest() {
                 message = message;
             };
         }
-        assertEquals {
-            actual = lexer.nextToken();
-            expected = null;
+        assertNull {
+            lexer.nextToken();
             message = "No more tokens expected";
         };
     }
