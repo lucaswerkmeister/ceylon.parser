@@ -94,5 +94,33 @@ shared object characterLiteral extends LiteralType("characterLiteral") {}
 
 "A numeric literal."
 shared abstract class NumericLiteralType(String string)
-// TODO case types
+        of IntegerLiteralType | floatLiteral
         extends LiteralType(string) {}
+
+"An integer literal."
+shared abstract class IntegerLiteralType(String string)
+        of decimalLiteral | hexLiteral | binaryLiteral
+        extends NumericLiteralType(string) {}
+
+"A decimal integer literal, with an optional magnitude, for example:
+ 
+     10_000
+     10k"
+shared object decimalLiteral extends IntegerLiteralType("decimalLiteral") {}
+
+"A hexadecimal integer literal, for example:
+ 
+     #10_FFFF"
+shared object hexLiteral extends IntegerLiteralType("hexLiteral") {}
+
+"A binary integer literal, for example:
+ 
+     $101010"
+shared object binaryLiteral extends IntegerLiteralType("binaryLiteral") {}
+
+"A floating point literal, for example:
+ 
+     1.5
+     10u
+     6.022E23"
+shared object floatLiteral extends NumericLiteralType("floatLiteral") {}
