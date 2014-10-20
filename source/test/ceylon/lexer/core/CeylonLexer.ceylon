@@ -3,7 +3,9 @@ import ceylon.lexer.core {
     StringCharacterStream,
     Token,
     TokenType,
+    binaryLiteral,
     characterLiteral,
+    hexLiteral,
     lidentifier,
     lineComment,
     multiComment,
@@ -153,6 +155,14 @@ shared class CeylonLexerTest() {
     test
     shared void characterLiteralWithQuote()
             => singleToken("""'\''""", characterLiteral, "Character literal with escaped quote");
+    
+    test
+    shared void simpleHexLiteral()
+            => singleToken("#10_FFFF", hexLiteral, "Simple hexadecimal literal");
+    
+    test
+    shared void simpleBinaryLiteral()
+            => singleToken("$10_1010", binaryLiteral, "Simple binary literal");
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
