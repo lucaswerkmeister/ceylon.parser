@@ -109,8 +109,32 @@ shared class CeylonLexer(CharacterStream characters) {
                     }
                     return token(lineComment, text.string);
                 } else {
-                    // TODO hex literal
+                    // hex literal
+                    characters.consume(1);
+                    StringBuilder text = StringBuilder();
+                    text.appendCharacter('#');
+                    while ((next = characters.peek()) == '_'
+                                || '0' <= next <= '9'
+                                || 'A' <= next <= 'F'
+                                || 'a' <= next <= 'f') {
+                        characters.consume();
+                        text.appendCharacter(next);
+                    }
+                    return token(hexLiteral, text.string);
                 }
+            }
+            case ('$') {
+                // binary literal
+                characters.consume(1);
+                StringBuilder text = StringBuilder();
+                text.appendCharacter('$');
+                while ((next = characters.peek()) == '0'
+                            || next == '1'
+                            || next == '_') {
+                    characters.consume();
+                    text.appendCharacter(next);
+                }
+                return token(binaryLiteral, text.string);
             }
             case ('\\') {
                 switch (next = characters.peek(1))
@@ -229,7 +253,6 @@ shared class CeylonLexer(CharacterStream characters) {
                             return token(stringMid, text.string);
                         }
                     }
-                    
                 } else {
                     // TODO backtick
                 }
