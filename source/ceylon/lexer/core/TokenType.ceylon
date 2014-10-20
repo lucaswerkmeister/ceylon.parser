@@ -1,5 +1,5 @@
 shared abstract class TokenType(string)
-        of IgnoredType | IdentifierType | LiteralType {
+        of IgnoredType | IdentifierType | LiteralType | KeywordType {
     shared actual String string;
 }
 
@@ -124,3 +124,143 @@ shared object binaryLiteral extends IntegerLiteralType("binaryLiteral") {}
      10u
      6.022E23"
 shared object floatLiteral extends NumericLiteralType("floatLiteral") {}
+
+"A keyword."
+shared abstract class KeywordType(String string)
+        of assemblyKw | moduleKw | packageKw | importKw | aliasKw | classKw |
+        interfaceKw | objectKw | givenKw | valueKw | assignKw | voidKw |
+        functionKw | newKw | ofKw | extendsKw | satisfiesKw | abstractsKw |
+        inKw | outKw | returnKw | breakKw | continueKw | throwKw | assertKw |
+        dynamicKw | ifKw | elseKw | switchKw | caseKw | forKw | whileKw |
+        tryKw | catchKw | finallyKw | thenKw | letKw |
+        thisKw | outerKw | superKw | isKw | existsKw | nonemptyKw
+        extends TokenType(string) {}
+
+"The ‘`assembly`’ keyword."
+shared object assemblyKw extends KeywordType("assemblyKw") {}
+
+"The ‘`module`’ keyword."
+shared object moduleKw extends KeywordType("moduleKw") {}
+
+"The ‘`package`’ keyword."
+shared object packageKw extends KeywordType("packageKw") {}
+
+"The ‘`import`’ keyword."
+shared object importKw extends KeywordType("importKw") {}
+
+"The ‘`alias`’ keyword."
+shared object aliasKw extends KeywordType("aliasKw") {}
+
+"The ‘`class`’ keyword."
+shared object classKw extends KeywordType("classKw") {}
+
+"The ‘`interface`’ keyword."
+shared object interfaceKw extends KeywordType("interfaceKw") {}
+
+"The ‘`object`’ keyword."
+shared object objectKw extends KeywordType("objectKw") {}
+
+"The ‘`given`’ keyword."
+shared object givenKw extends KeywordType("givenKw") {}
+
+"The ‘`value`’ keyword."
+shared object valueKw extends KeywordType("valueKw") {}
+
+"The ‘`assign`’ keyword."
+shared object assignKw extends KeywordType("assignKw") {}
+
+"The ‘`void`’ keyword."
+shared object voidKw extends KeywordType("voidKw") {}
+
+"The ‘`function`’ keyword."
+shared object functionKw extends KeywordType("functionKw") {}
+
+"The ‘`new`’ keyword."
+shared object newKw extends KeywordType("newKw") {}
+
+"The ‘`of`’ keyword."
+shared object ofKw extends KeywordType("ofKw") {}
+
+"The ‘`extends`’ keyword."
+shared object extendsKw extends KeywordType("extendsKw") {}
+
+"The ‘`satisfies`’ keyword."
+shared object satisfiesKw extends KeywordType("satisfiesKw") {}
+
+"The ‘`abstracts`’ keyword."
+shared object abstractsKw extends KeywordType("abstractsKw") {}
+
+"The ‘`in`’ keyword."
+shared object inKw extends KeywordType("inKw") {}
+
+"The ‘`out`’ keyword."
+shared object outKw extends KeywordType("outKw") {}
+
+"The ‘`return`’ keyword."
+shared object returnKw extends KeywordType("returnKw") {}
+
+"The ‘`break`’ keyword."
+shared object breakKw extends KeywordType("breakKw") {}
+
+"The ‘`continue`’ keyword."
+shared object continueKw extends KeywordType("continueKw") {}
+
+"The ‘`throw`’ keyword."
+shared object throwKw extends KeywordType("throwKw") {}
+
+"The ‘`assert`’ keyword."
+shared object assertKw extends KeywordType("assertKw") {}
+
+"The ‘`dynamic`’ keyword."
+shared object dynamicKw extends KeywordType("dynamicKw") {}
+
+"The ‘`if`’ keyword."
+shared object ifKw extends KeywordType("ifKw") {}
+
+"The ‘`else`’ keyword."
+shared object elseKw extends KeywordType("elseKw") {}
+
+"The ‘`switch`’ keyword."
+shared object switchKw extends KeywordType("switchKw") {}
+
+"The ‘`case`’ keyword."
+shared object caseKw extends KeywordType("caseKw") {}
+
+"The ‘`for`’ keyword."
+shared object forKw extends KeywordType("forKw") {}
+
+"The ‘`while`’ keyword."
+shared object whileKw extends KeywordType("whileKw") {}
+
+"The ‘`try`’ keyword."
+shared object tryKw extends KeywordType("tryKw") {}
+
+"The ‘`catch`’ keyword."
+shared object catchKw extends KeywordType("catchKw") {}
+
+"The ‘`finally`’ keyword."
+shared object finallyKw extends KeywordType("finallyKw") {}
+
+"The ‘`then`’ keyword."
+shared object thenKw extends KeywordType("thenKw") {}
+
+"The ‘`let`’ keyword."
+shared object letKw extends KeywordType("letKw") {}
+
+"The ‘`this`’ keyword."
+shared object thisKw extends KeywordType("thisKw") {}
+
+"The ‘`outer`’ keyword."
+shared object outerKw extends KeywordType("outerKw") {}
+
+"The ‘`super`’ keyword."
+shared object superKw extends KeywordType("superKw") {}
+
+"The ‘`is`’ keyword."
+shared object isKw extends KeywordType("isKw") {}
+
+"The ‘`exists`’ keyword."
+shared object existsKw extends KeywordType("existsKw") {}
+
+"The ‘`nonempty`’ keyword."
+shared object nonemptyKw extends KeywordType("nonemptyKw") {}
