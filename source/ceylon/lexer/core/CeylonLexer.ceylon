@@ -365,17 +365,422 @@ shared class CeylonLexer(CharacterStream characters) {
                     return token(decimalLiteral, text.string);
                 }
             }
+            case ('a') {
+                if (characters.peek(1) == 'l'
+                            && characters.peek(2) == 'i'
+                            && characters.peek(3) == 'a'
+                            && characters.peek(4) == 's'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(aliasKw, "alias");
+                } else if (characters.peek(1) == 's'
+                            && characters.peek(2) == 's') {
+                    if (characters.peek(3) == 'e') {
+                        if (characters.peek(4) == 'm'
+                                    && characters.peek(5) == 'b'
+                                    && characters.peek(6) == 'l'
+                                    && characters.peek(7) == 'y'
+                                    && !isIdentifierPart(characters.peek(8))) {
+                            characters.consume(8);
+                            return token(assemblyKw, "assembly");
+                        } else if (characters.peek(4) == 'r'
+                                    && characters.peek(5) == 't'
+                                    && !isIdentifierPart(characters.peek(6))) {
+                            characters.consume(6);
+                            return token(assertKw, "assert");
+                        } else {
+                            return identifier(next);
+                        }
+                    } else if (characters.peek(3) == 'i'
+                                && characters.peek(4) == 'g'
+                                && characters.peek(5) == 'n'
+                                && !isIdentifierPart(characters.peek(6))) {
+                        characters.consume(6);
+                        return token(assignKw, "assign");
+                    } else {
+                        return identifier(next);
+                    }
+                } else if (characters.peek(1) == 'b'
+                            && characters.peek(2) == 's'
+                            && characters.peek(3) == 't'
+                            && characters.peek(4) == 'r'
+                            && characters.peek(5) == 'a'
+                            && characters.peek(6) == 'c'
+                            && characters.peek(7) == 't'
+                            && characters.peek(8) == 's'
+                            && !isIdentifierPart(characters.peek(9))) {
+                    characters.consume(9);
+                    return token(abstractsKw, "abstracts");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('b') {
+                if (characters.peek(1) == 'r'
+                            && characters.peek(2) == 'e'
+                            && characters.peek(3) == 'a'
+                            && characters.peek(4) == 'k'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(breakKw, "break");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('c') {
+                if (characters.peek(1) == 'l'
+                            && characters.peek(2) == 'a'
+                            && characters.peek(3) == 's'
+                            && characters.peek(4) == 's'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(classKw, "class");
+                } else if (characters.peek(1) == 'o'
+                            && characters.peek(2) == 'n'
+                            && characters.peek(3) == 't'
+                            && characters.peek(4) == 'i'
+                            && characters.peek(5) == 'n'
+                            && characters.peek(6) == 'u'
+                            && characters.peek(7) == 'e'
+                            && !isIdentifierPart(characters.peek(8))) {
+                    characters.consume(8);
+                    return token(continueKw, "continue");
+                } else if (characters.peek(1) == 'a') {
+                    if (characters.peek(2) == 's'
+                                && characters.peek(3) == 'e'
+                                && !isIdentifierPart(characters.peek(4))) {
+                        characters.consume(4);
+                        return token(caseKw, "case");
+                    } else if (characters.peek(2) == 't'
+                                && characters.peek(3) == 'c'
+                                && characters.peek(4) == 'h'
+                                && !isIdentifierPart(characters.peek(5))) {
+                        characters.consume(5);
+                        return token(catchKw, "catch");
+                    } else {
+                        return identifier(next);
+                    }
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('d') {
+                if (characters.peek(1) == 'y'
+                            && characters.peek(2) == 'n'
+                            && characters.peek(3) == 'a'
+                            && characters.peek(4) == 'm'
+                            && characters.peek(5) == 'i'
+                            && characters.peek(6) == 'c'
+                            && !isIdentifierPart(characters.peek(7))) {
+                    characters.consume(7);
+                    return token(dynamicKw, "dynamic");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('e') {
+                if (characters.peek(1) == 'x') {
+                    if (characters.peek(2) == 't'
+                                && characters.peek(3) == 'e'
+                                && characters.peek(4) == 'n'
+                                && characters.peek(5) == 'd'
+                                && characters.peek(6) == 's'
+                                && !isIdentifierPart(characters.peek(7))) {
+                        characters.consume(7);
+                        return token(extendsKw, "extends");
+                    } else if (characters.peek(2) == 'i'
+                                && characters.peek(3) == 's'
+                                && characters.peek(4) == 't'
+                                && characters.peek(5) == 's'
+                                && !isIdentifierPart(characters.peek(6))) {
+                        characters.consume(6);
+                        return token(existsKw, "exists");
+                    } else {
+                        return identifier(next);
+                    }
+                } else if (characters.peek(1) == 'l'
+                            && characters.peek(2) == 's'
+                            && characters.peek(3) == 'e'
+                            && !isIdentifierPart(characters.peek(4))) {
+                    characters.consume(4);
+                    return token(elseKw, "else");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('f') {
+                if (characters.peek(1) == 'u'
+                            && characters.peek(2) == 'n'
+                            && characters.peek(3) == 'c'
+                            && characters.peek(4) == 't'
+                            && characters.peek(5) == 'i'
+                            && characters.peek(6) == 'o'
+                            && characters.peek(7) == 'n'
+                            && !isIdentifierPart(characters.peek(8))) {
+                    characters.consume(8);
+                    return token(functionKw, "function");
+                } else if (characters.peek(1) == 'o'
+                            && characters.peek(2) == 'r'
+                            && !isIdentifierPart(characters.peek(3))) {
+                    characters.consume(3);
+                    return token(forKw, "for");
+                } else if (characters.peek(1) == 'i'
+                            && characters.peek(2) == 'n'
+                            && characters.peek(3) == 'a'
+                            && characters.peek(4) == 'l'
+                            && characters.peek(5) == 'l'
+                            && characters.peek(6) == 'y'
+                            && !isIdentifierPart(characters.peek(7))) {
+                    characters.consume(7);
+                    return token(finallyKw, "finally");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('g') {
+                if (characters.peek(1) == 'i'
+                            && characters.peek(2) == 'v'
+                            && characters.peek(3) == 'e'
+                            && characters.peek(4) == 'n'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(givenKw, "given");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('i') {
+                if (characters.peek(1) == 'f'
+                            && !isIdentifierPart(characters.peek(2))) {
+                    characters.consume(2);
+                    return token(ifKw, "if");
+                } else if (characters.peek(1) == 's'
+                            && !isIdentifierPart(characters.peek(2))) {
+                    characters.consume(2);
+                    return token(isKw, "is");
+                } else if (characters.peek(1) == 'm'
+                            && characters.peek(2) == 'p'
+                            && characters.peek(3) == 'o'
+                            && characters.peek(4) == 'r'
+                            && characters.peek(5) == 't'
+                            && !isIdentifierPart(characters.peek(6))) {
+                    characters.consume(6);
+                    return token(importKw, "import");
+                } else if (characters.peek(1) == 'n') {
+                    if (characters.peek(2) == 't'
+                                && characters.peek(3) == 'e'
+                                && characters.peek(4) == 'r'
+                                && characters.peek(5) == 'f'
+                                && characters.peek(6) == 'a'
+                                && characters.peek(7) == 'c'
+                                && characters.peek(8) == 'e'
+                                && !isIdentifierPart(characters.peek(9))) {
+                        characters.consume(9);
+                        return token(interfaceKw, "interface");
+                    } else if (!isIdentifierPart(characters.peek(2))) {
+                        characters.consume(2);
+                        return token(inKw, "in");
+                    } else {
+                        return identifier(next);
+                    }
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('m') {
+                if (characters.peek(1) == 'o'
+                            && characters.peek(2) == 'd'
+                            && characters.peek(3) == 'u'
+                            && characters.peek(4) == 'l'
+                            && characters.peek(5) == 'e'
+                            && !isIdentifierPart(characters.peek(6))) {
+                    characters.consume(6);
+                    return token(moduleKw, "module");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('n') {
+                if (characters.peek(1) == 'e'
+                            && characters.peek(2) == 'w'
+                            && !isIdentifierPart(characters.peek(3))) {
+                    characters.consume(3);
+                    return token(newKw, "new");
+                } else if (characters.peek(1) == 'o'
+                            && characters.peek(2) == 'n'
+                            && characters.peek(3) == 'e'
+                            && characters.peek(4) == 'm'
+                            && characters.peek(5) == 'p'
+                            && characters.peek(6) == 't'
+                            && characters.peek(7) == 'y'
+                            && !isIdentifierPart(characters.peek(8))) {
+                    characters.consume(8);
+                    return token(nonemptyKw, "nonempty");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('l') {
+                if (characters.peek(1) == 'e'
+                            && characters.peek(2) == 't'
+                            && !isIdentifierPart(characters.peek(3))) {
+                    characters.consume(3);
+                    return token(letKw, "let");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('o') {
+                if (characters.peek(1) == 'b'
+                            && characters.peek(2) == 'j'
+                            && characters.peek(3) == 'e'
+                            && characters.peek(4) == 'c'
+                            && characters.peek(5) == 't'
+                            && !isIdentifierPart(characters.peek(6))) {
+                    characters.consume(6);
+                    return token(objectKw, "object");
+                } else if (characters.peek(1) == 'f'
+                            && !isIdentifierPart(characters.peek(2))) {
+                    characters.consume(2);
+                    return token(ofKw, "of");
+                } else if (characters.peek(1) == 'u'
+                            && characters.peek(2) == 't') {
+                    if (!isIdentifierPart(characters.peek(3))) {
+                        characters.consume(3);
+                        return token(outKw, "out");
+                    } else if (characters.peek(3) == 'e'
+                                && characters.peek(4) == 'r'
+                                && !isIdentifierPart(characters.peek(5))) {
+                        characters.consume(5);
+                        return token(outerKw, "outer");
+                    } else {
+                        return identifier(next);
+                    }
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('p') {
+                if (characters.peek(1) == 'a'
+                            && characters.peek(2) == 'c'
+                            && characters.peek(3) == 'k'
+                            && characters.peek(4) == 'a'
+                            && characters.peek(5) == 'g'
+                            && characters.peek(6) == 'e'
+                            && !isIdentifierPart(characters.peek(7))) {
+                    characters.consume(7);
+                    return token(packageKw, "package");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('r') {
+                if (characters.peek(1) == 'e'
+                            && characters.peek(2) == 't'
+                            && characters.peek(3) == 'u'
+                            && characters.peek(4) == 'r'
+                            && characters.peek(5) == 'n'
+                            && !isIdentifierPart(characters.peek(6))) {
+                    characters.consume(6);
+                    return token(returnKw, "return");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('s') {
+                if (characters.peek(1) == 'a'
+                            && characters.peek(2) == 't'
+                            && characters.peek(3) == 'i'
+                            && characters.peek(4) == 's'
+                            && characters.peek(5) == 'f'
+                            && characters.peek(6) == 'i'
+                            && characters.peek(7) == 'e'
+                            && characters.peek(8) == 's'
+                            && !isIdentifierPart(characters.peek(9))) {
+                    characters.consume(9);
+                    return token(satisfiesKw, "satisfies");
+                } else if (characters.peek(1) == 'w'
+                            && characters.peek(2) == 'i'
+                            && characters.peek(3) == 't'
+                            && characters.peek(4) == 'c'
+                            && characters.peek(5) == 'h'
+                            && !isIdentifierPart(characters.peek(6))) {
+                    characters.consume(6);
+                    return token(switchKw, "switch");
+                } else if (characters.peek(1) == 'u'
+                            && characters.peek(2) == 'p'
+                            && characters.peek(3) == 'e'
+                            && characters.peek(4) == 'r'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(superKw, "super");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('t') {
+                if (characters.peek(1) == 'h') {
+                    if (characters.peek(2) == 'r'
+                                && characters.peek(3) == 'o'
+                                && characters.peek(4) == 'w'
+                                && !isIdentifierPart(characters.peek(5))) {
+                        characters.consume(5);
+                        return token(throwKw, "throw");
+                    } else if (characters.peek(2) == 'e'
+                                && characters.peek(3) == 'n'
+                                && !isIdentifierPart(characters.peek(4))) {
+                        characters.consume(4);
+                        return token(thenKw, "then");
+                    } else if (characters.peek(2) == 'i'
+                                && characters.peek(3) == 's'
+                                && !isIdentifierPart(characters.peek(4))) {
+                        characters.consume(4);
+                        return token(thisKw, "this");
+                    } else {
+                        return identifier(next);
+                    }
+                } else if (characters.peek(1) == 'r'
+                            && characters.peek(2) == 'y'
+                            && !isIdentifierPart(characters.peek(3))) {
+                    characters.consume(3);
+                    return token(tryKw, "try");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('v') {
+                if (characters.peek(1) == 'a'
+                            && characters.peek(2) == 'l'
+                            && characters.peek(3) == 'u'
+                            && characters.peek(4) == 'e'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(valueKw, "value");
+                } else if (characters.peek(1) == 'o'
+                            && characters.peek(2) == 'i'
+                            && characters.peek(3) == 'd'
+                            && !isIdentifierPart(characters.peek(4))) {
+                    characters.consume(4);
+                    return token(voidKw, "void");
+                } else {
+                    return identifier(next);
+                }
+            }
+            case ('w') {
+                if (characters.peek(1) == 'h'
+                            && characters.peek(2) == 'i'
+                            && characters.peek(3) == 'l'
+                            && characters.peek(4) == 'e'
+                            && !isIdentifierPart(characters.peek(5))) {
+                    characters.consume(5);
+                    return token(whileKw, "while");
+                } else {
+                    return identifier(next);
+                }
+            }
             else {
                 if (isIdentifierStart(next)) {
-                    characters.consume();
-                    StringBuilder text = StringBuilder();
-                    text.appendCharacter(next);
-                    Boolean lowercase = next.lowercase;
-                    while (isIdentifierPart(next = characters.peek())) {
-                        text.appendCharacter(next);
-                        characters.consume();
-                    }
-                    return token(lowercase then lidentifier else uidentifier, text.string);
+                    return identifier(next);
                 } else {
                     if (next.whitespace) {
                         characters.consume();
@@ -393,6 +798,22 @@ shared class CeylonLexer(CharacterStream characters) {
             }
         }
         return null;
+    }
+    
+    "Given an initial character of an identifier,
+     consumes that character, then reads on
+     until the identifier is finished."
+    Token identifier(Character first) {
+        characters.consume();
+        StringBuilder text = StringBuilder();
+        text.appendCharacter(first);
+        Boolean lowercase = first.lowercase;
+        variable Character next;
+        while (isIdentifierPart(next = characters.peek())) {
+            text.appendCharacter(next);
+            characters.consume();
+        }
+        return token(lowercase then lidentifier else uidentifier, text.string);
     }
     
     Token token(TokenType type, String text)
