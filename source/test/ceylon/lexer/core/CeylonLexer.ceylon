@@ -3,6 +3,7 @@ import ceylon.lexer.core {
     StringCharacterStream,
     Token,
     TokenType,
+    KeywordType,
     binaryLiteral,
     characterLiteral,
     decimalLiteral,
@@ -202,6 +203,33 @@ shared class CeylonLexerTest() {
     test
     shared void floatLiteralWithGrouping()
             => singleToken("1_234.567_8", floatLiteral, "Float literal with grouping");
+    
+    test
+    shared void singleKeywords() {
+        for (kw in `KeywordType`.caseValues) {
+            singleToken(kw.string[... kw.string.size - 3], kw, kw.string);
+        }
+    }
+    
+    test
+    shared void singleNonKeywords() {
+        for (kw in `KeywordType`.caseValues) {
+            singleToken(kw.string[... kw.string.size - 3] + "_", lidentifier, "LIdentifier beginning with ``kw.string``");
+        }
+    }
+    
+    test
+    shared void allKeywords() {
+        assert (nonempty inputs = expand {
+                { " "->whitespace },
+                for (kw in `KeywordType`.caseValues)
+                    {
+                        kw.string[... kw.string.size - 3]->kw,
+                        " "->whitespace
+                    }
+            }.sequence());
+        multipleTokens("All keywords", *inputs);
+    }
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
