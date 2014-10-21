@@ -789,10 +789,16 @@ shared class CeylonLexer(CharacterStream characters) {
             case (')') { return charToken(rparen, ')'); }
             case ('[') { return charToken(lbracket, '['); }
             case (']') { return charToken(rbracket, ']'); }
+            case (':') { return charToken(measureOp, ':'); }
             case ('.') {
-                if (characters.peek(1) == '.' && characters.peek(2) == '.') {
-                    characters.consume(3);
-                    return token(ellipsis, "...");
+                if (characters.peek(1) == '.') {
+                    if (characters.peek(2) == '.') {
+                        characters.consume(3);
+                        return token(ellipsis, "...");
+                    } else {
+                        characters.consume(2);
+                        return token(spanOp, "..");
+                    }
                 } else {
                     return charToken(memberOp, '.');
                 }
@@ -832,16 +838,32 @@ shared class CeylonLexer(CharacterStream characters) {
                 }
             }
             case ('+') {
-                if (characters.peek(1) == '=') {
+                switch (characters.peek(1))
+                case ('=') {
                     // TODO +=
-                } else {
+                }
+                case ('+') {
+                    characters.consume(2);
+                    return token(incrementOp, "++");
+                }
+                else {
                     return charToken(sumOp, '+');
                 }
             }
             case ('-') {
-                if (characters.peek(1) == '=') {
+                switch (characters.peek(1))
+                case ('=') {
                     // TODO -=
-                } else {
+                }
+                case ('-') {
+                    characters.consume(2);
+                    return token(decrementOp, "--");
+                }
+                case ('>') {
+                    characters.consume(2);
+                    return token(entryOp, "->");
+                }
+                else {
                     return charToken(differenceOp, '-');
                 }
             }
@@ -857,6 +879,36 @@ shared class CeylonLexer(CharacterStream characters) {
                     // TODO ^=
                 } else {
                     return charToken(powerOp, '^');
+                }
+            }
+            case ('!') {
+                if (characters.peek(1) == '=') {
+                    // TODO !=
+                } else {
+                    return charToken(notOp, '!');
+                }
+            }
+            case ('&') {
+                if (characters.peek(1) == '&') {
+                    characters.consume(2);
+                    return token(andOp, "&&");
+                } else {
+                    return charToken(intersectionOp, '&');
+                }
+            }
+            case ('|') {
+                if (characters.peek(1) == '|') {
+                    characters.consume(2);
+                    return token(orOp, "||");
+                } else {
+                    return charToken(unionOp, '|');
+                }
+            }
+            case ('~') {
+                if (characters.peek(1) == '=') {
+                    // TODO ~=
+                } else {
+                    return charToken(complementOp, '~');
                 }
             }
             else {
