@@ -267,7 +267,8 @@ shared object nonemptyKw extends KeywordType("nonemptyKw") {}
 
 "A symbol, that is, an operator or punctuation."
 shared abstract class SymbolType(String string)
-        of comma | semicolon | ellipsis | lbrace | rbrace | lparen | rparen | lbracket | rbracket
+        of comma | semicolon | ellipsis | lbrace | rbrace | lparen | rparen | lbracket | rbracket |
+        backtick | questionMark | memberOp | safeMemberOp | spreadMemberOp | specify | compute
         extends TokenType(string) {}
 
 "A comma: ‘`,`’"
@@ -296,3 +297,24 @@ shared object lbracket extends SymbolType("lbracket") {}
 
 "A right bracket: ‘`]`’"
 shared object rbracket extends SymbolType("rbracket") {}
+
+"A backtick: ‘\`\` ` \`\`’"
+shared object backtick extends SymbolType("backtick") {}
+
+"A question mark: ‘`?`’"
+shared object questionMark extends SymbolType("optional") {} // not called “optional” because importing that gives an error: hides language modifier
+
+"A member operator: ‘`.`’"
+shared object memberOp extends SymbolType("memberOp") {}
+
+"A safe member operator: ‘`?.`’"
+shared object safeMemberOp extends SymbolType("safeMemberOp") {}
+
+"A spread member operator: ‘`*.`’"
+shared object spreadMemberOp extends SymbolType("spreadMemberOp") {}
+
+"An eager specification operator: ‘`=`’"
+shared object specify extends SymbolType("specify") {}
+
+"A lazy specification operator: ‘`=>`’"
+shared object compute extends SymbolType("compute") {}
