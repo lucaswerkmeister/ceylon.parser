@@ -267,7 +267,7 @@ shared class CeylonLexer(CharacterStream characters) {
                         }
                     }
                 } else {
-                    // TODO backtick
+                    return charToken(backtick, '`');
                 }
             }
             case ('\'') {
@@ -791,7 +791,32 @@ shared class CeylonLexer(CharacterStream characters) {
                     characters.consume(3);
                     return token(ellipsis, "...");
                 } else {
-                    // TODO member operator
+                    return charToken(memberOp, '.');
+                }
+            }
+            case ('?') {
+                if (characters.peek(1) == '.') {
+                    characters.consume(2);
+                    return token(safeMemberOp, "?.");
+                } else {
+                    return charToken(questionMark, '?');
+                }
+            }
+            case ('*') {
+                if (characters.peek(1) == '.') {
+                    characters.consume(2);
+                    return token(spreadMemberOp, "*.");
+                } else {
+                    // TODO multiplication operator
+                }
+            }
+            case ('=') {
+                if (characters.peek(1) == '>') {
+                    characters.consume(2);
+                    return token(compute, "=>");
+                } else {
+                    // TODO check for ===, ==
+                    return charToken(specify, '=');
                 }
             }
             else {
