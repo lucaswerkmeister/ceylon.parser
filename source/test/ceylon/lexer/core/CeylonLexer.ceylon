@@ -10,6 +10,7 @@ import ceylon.lexer.core {
     comma,
     compute,
     decimalLiteral,
+    differenceOp,
     ellipsis,
     floatLiteral,
     hexLiteral,
@@ -20,11 +21,16 @@ import ceylon.lexer.core {
     lparen,
     memberOp,
     multiComment,
+    powerOp,
+    productOp,
     questionMark,
+    quotientOp,
     rbrace,
     rbracket,
+    remainderOp,
     rparen,
     safeMemberOp,
+    scaleOp,
     semicolon,
     specify,
     spreadMemberOp,
@@ -32,6 +38,7 @@ import ceylon.lexer.core {
     stringLiteral,
     stringMid,
     stringStart,
+    sumOp,
     uidentifier,
     verbatimStringLiteral,
     whitespace
@@ -265,7 +272,14 @@ shared class CeylonLexerTest() {
         "?."->safeMemberOp,
         "*."->spreadMemberOp,
         "="->specify, " "->whitespace,
-        "=>"->compute);
+        "=>"->compute,
+        "+"->sumOp,
+        "-"->differenceOp,
+        "*"->productOp,
+        "/"->quotientOp,
+        "%"->remainderOp,
+        "^"->powerOp,
+        "**"->scaleOp);
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
