@@ -269,7 +269,8 @@ shared object nonemptyKw extends KeywordType("nonemptyKw") {}
 shared abstract class SymbolType(String string)
         of comma | semicolon | ellipsis | lbrace | rbrace | lparen | rparen | lbracket | rbracket |
         backtick | questionMark | memberOp | safeMemberOp | spreadMemberOp | specify | compute |
-        sumOp | differenceOp | productOp | quotientOp | remainderOp | powerOp | scaleOp
+        sumOp | differenceOp | productOp | quotientOp | remainderOp | powerOp | scaleOp |
+        incrementOp | decrementOp | spanOp | measureOp | entryOp | notOp | andOp | orOp | complementOp | intersectionOp | unionOp
         extends TokenType(string) {}
 
 "A comma: ‘`,`’"
@@ -340,3 +341,37 @@ shared object powerOp extends SymbolType("powerOp") {}
 
 "A scale operator: ‘`**`’"
 shared object scaleOp extends SymbolType("scaleOp") {}
+
+"An increment operator: ‘`++`’"
+shared object incrementOp extends SymbolType("incrementOp") {}
+
+"A decrement operator: ‘`--`’"
+shared object decrementOp extends SymbolType("decrementOp") {}
+
+"A span operator: ‘`..`’"
+shared object spanOp extends SymbolType("spanOp") {}
+
+"A measure operator: ‘`:`’"
+shared object measureOp extends SymbolType("measureOp") {}
+
+"An entry operator: ‘`->`’"
+shared object entryOp extends SymbolType("entryOp") {}
+
+"A not operator: ‘`!`’"
+shared object notOp extends SymbolType("notOp") {}
+
+"An and operator: ‘`&&`’"
+shared object andOp extends SymbolType("andOp") {}
+
+"An or operator: ‘`||`’"
+shared object orOp extends SymbolType("orOp") {}
+
+"A complement operator: ‘`~`’"
+shared object complementOp extends SymbolType("complementOp") {}
+
+"An intersection operator: ‘`&`’"
+shared object intersectionOp extends SymbolType("intersectionOp") {}
+
+"A union operator: ‘`|`’"
+shared object unionOp extends SymbolType("unionOp") {}
+
