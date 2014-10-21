@@ -778,6 +778,22 @@ shared class CeylonLexer(CharacterStream characters) {
                     return identifier(next);
                 }
             }
+            case (',') { return charToken(comma, ','); }
+            case (';') { return charToken(semicolon, ';'); }
+            case ('{') { return charToken(lbrace, '{'); }
+            case ('}') { return charToken(rbrace, '}'); }
+            case ('(') { return charToken(lparen, '('); }
+            case (')') { return charToken(rparen, ')'); }
+            case ('[') { return charToken(lbracket, '['); }
+            case (']') { return charToken(rbracket, ']'); }
+            case ('.') {
+                if (characters.peek(1) == '.' && characters.peek(2) == '.') {
+                    characters.consume(3);
+                    return token(ellipsis, "...");
+                } else {
+                    // TODO member operator
+                }
+            }
             else {
                 if (isIdentifierStart(next)) {
                     return identifier(next);
@@ -814,6 +830,14 @@ shared class CeylonLexer(CharacterStream characters) {
             characters.consume();
         }
         return token(lowercase then lidentifier else uidentifier, text.string);
+    }
+    
+    "Given a single character,
+     consumes that character,
+     then returns a token with that single character."
+    Token charToken(TokenType type, Character text) {
+        characters.consume();
+        return token(type, text.string);
     }
     
     Token token(TokenType type, String text)
