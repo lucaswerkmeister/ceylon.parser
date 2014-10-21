@@ -6,11 +6,20 @@ import ceylon.lexer.core {
     KeywordType,
     binaryLiteral,
     characterLiteral,
+    comma,
     decimalLiteral,
+    ellipsis,
     floatLiteral,
     hexLiteral,
+    lbrace,
+    lbracket,
     lidentifier,
     lineComment,
+    lparen,
+    rbrace,
+    rbracket,
+    rparen,
+    semicolon,
     multiComment,
     stringEnd,
     stringLiteral,
@@ -230,6 +239,19 @@ shared class CeylonLexerTest() {
             }.sequence());
         multipleTokens("All keywords", *inputs);
     }
+    
+    test
+    shared void allSymbols()
+            => multipleTokens("All symbols",
+        ","->comma,
+        ";"->semicolon,
+        "..."->ellipsis,
+        "{"->lbrace,
+        "}"->rbrace,
+        "("->lparen,
+        ")"->rparen,
+        "["->lbracket,
+        "]"->rbracket);
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
