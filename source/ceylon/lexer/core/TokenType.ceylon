@@ -1,5 +1,5 @@
 shared abstract class TokenType(string)
-        of IgnoredType | IdentifierType | LiteralType | KeywordType {
+        of IgnoredType | IdentifierType | LiteralType | KeywordType | SymbolType {
     shared actual String string;
 }
 
@@ -264,3 +264,35 @@ shared object existsKw extends KeywordType("existsKw") {}
 
 "The ‘`nonempty`’ keyword."
 shared object nonemptyKw extends KeywordType("nonemptyKw") {}
+
+"A symbol, that is, an operator or punctuation."
+shared abstract class SymbolType(String string)
+        of comma | semicolon | ellipsis | lbrace | rbrace | lparen | rparen | lbracket | rbracket
+        extends TokenType(string) {}
+
+"A comma: ‘`,`’"
+shared object comma extends SymbolType("comma") {}
+
+"A semicolon: ‘`;`’"
+shared object semicolon extends SymbolType("semicolon") {}
+
+"An ellipsis: ‘`...`’"
+shared object ellipsis extends SymbolType("ellipsis") {}
+
+"A left brace: ‘`{`’"
+shared object lbrace extends SymbolType("lbrace") {}
+
+"A right brace: ‘`}`’"
+shared object rbrace extends SymbolType("rbrace") {}
+
+"A left parenthesis: ‘`(`’"
+shared object lparen extends SymbolType("lparen") {}
+
+"A right parenthesis: ‘`)`’"
+shared object rparen extends SymbolType("rparen") {}
+
+"A left bracket: ‘`[`’"
+shared object lbracket extends SymbolType("lbracket") {}
+
+"A right bracket: ‘`]`’"
+shared object rbracket extends SymbolType("rbracket") {}
