@@ -106,8 +106,11 @@ shared class CeylonLexer(CharacterStream characters) {
                     }
                     return token(multiComment, text.string);
                 }
+                case ('=') {
+                    // TODO /=
+                }
                 else {
-                    // TODO division operator
+                    return charToken(quotientOp, '/');
                 }
             }
             case ('#') {
@@ -803,11 +806,20 @@ shared class CeylonLexer(CharacterStream characters) {
                 }
             }
             case ('*') {
-                if (characters.peek(1) == '.') {
+                switch (characters.peek(1))
+                case ('.') {
                     characters.consume(2);
                     return token(spreadMemberOp, "*.");
-                } else {
-                    // TODO multiplication operator
+                }
+                case ('=') {
+                    // TODO *=
+                }
+                case ('*') {
+                    characters.consume(2);
+                    return token(scaleOp, "**");
+                }
+                else {
+                    return charToken(productOp, '*');
                 }
             }
             case ('=') {
@@ -817,6 +829,34 @@ shared class CeylonLexer(CharacterStream characters) {
                 } else {
                     // TODO check for ===, ==
                     return charToken(specify, '=');
+                }
+            }
+            case ('+') {
+                if (characters.peek(1) == '=') {
+                    // TODO +=
+                } else {
+                    return charToken(sumOp, '+');
+                }
+            }
+            case ('-') {
+                if (characters.peek(1) == '=') {
+                    // TODO -=
+                } else {
+                    return charToken(differenceOp, '-');
+                }
+            }
+            case ('%') {
+                if (characters.peek(1) == '=') {
+                    // TODO %=
+                } else {
+                    return charToken(remainderOp, '%');
+                }
+            }
+            case ('^') {
+                if (characters.peek(1) == '=') {
+                    // TODO ^=
+                } else {
+                    return charToken(powerOp, '^');
                 }
             }
             else {
