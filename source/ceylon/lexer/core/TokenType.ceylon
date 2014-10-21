@@ -268,7 +268,8 @@ shared object nonemptyKw extends KeywordType("nonemptyKw") {}
 "A symbol, that is, an operator or punctuation."
 shared abstract class SymbolType(String string)
         of comma | semicolon | ellipsis | lbrace | rbrace | lparen | rparen | lbracket | rbracket |
-        backtick | questionMark | memberOp | safeMemberOp | spreadMemberOp | specify | compute
+        backtick | questionMark | memberOp | safeMemberOp | spreadMemberOp | specify | compute |
+        sumOp | differenceOp | productOp | quotientOp | remainderOp | powerOp | scaleOp
         extends TokenType(string) {}
 
 "A comma: ‘`,`’"
@@ -318,3 +319,24 @@ shared object specify extends SymbolType("specify") {}
 
 "A lazy specification operator: ‘`=>`’"
 shared object compute extends SymbolType("compute") {}
+
+"A sum operator: ‘`+`’"
+shared object sumOp extends SymbolType("sumOp") {}
+
+"A difference operator: ‘`-`’"
+shared object differenceOp extends SymbolType("differenceOp") {}
+
+"A product or spread operator: ‘`*`’"
+shared object productOp extends SymbolType("productOp") {}
+
+"A quotient operator: ‘`/`’"
+shared object quotientOp extends SymbolType("quotientOp") {}
+
+"A remainder operator: ‘`%`’"
+shared object remainderOp extends SymbolType("remainderOp") {}
+
+"A power operator: ‘`^`’"
+shared object powerOp extends SymbolType("powerOp") {}
+
+"A scale operator: ‘`**`’"
+shared object scaleOp extends SymbolType("scaleOp") {}
