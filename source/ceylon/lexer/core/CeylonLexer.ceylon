@@ -829,11 +829,21 @@ shared class CeylonLexer(CharacterStream characters) {
                 }
             }
             case ('=') {
-                if (characters.peek(1) == '>') {
+                switch (characters.peek(1))
+                case ('>') {
                     characters.consume(2);
                     return token(compute, "=>");
-                } else {
-                    // TODO check for ===, ==
+                }
+                case ('=') {
+                    if (characters.peek(2) == '=') {
+                        characters.consume(3);
+                        return token(identicalOp, "===");
+                    } else {
+                        characters.consume(2);
+                        return token(equalOp, "==");
+                    }
+                }
+                else {
                     return charToken(specify, '=');
                 }
             }
@@ -883,7 +893,8 @@ shared class CeylonLexer(CharacterStream characters) {
             }
             case ('!') {
                 if (characters.peek(1) == '=') {
-                    // TODO !=
+                    characters.consume(2);
+                    return token(notEqualOp, "!=");
                 } else {
                     return charToken(notOp, '!');
                 }
@@ -909,6 +920,28 @@ shared class CeylonLexer(CharacterStream characters) {
                     // TODO ~=
                 } else {
                     return charToken(complementOp, '~');
+                }
+            }
+            case ('<') {
+                if (characters.peek(1) == '=') {
+                    if (characters.peek(2) == '>') {
+                        characters.consume(3);
+                        return token(compareOp, "<=>");
+                    } else {
+                        characters.consume(2);
+                        return token(smallAsOp, "<=");
+                    }
+                } else {
+                    return charToken(smallerOp, '<');
+                }
+            }
+            case ('>') {
+                if (characters.peek(1) == '=') {
+                    // TODO the Ceylon.g rule for LARGE_AS_OP does lots of lookahead… why? do we need that?
+                    characters.consume(2);
+                    return token(largeAsOp, ">=");
+                } else {
+                    return charToken(largerOp, '>');
                 }
             }
             else {
