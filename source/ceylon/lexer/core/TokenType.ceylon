@@ -270,7 +270,8 @@ shared abstract class SymbolType(String string)
         of comma | semicolon | ellipsis | lbrace | rbrace | lparen | rparen | lbracket | rbracket |
         backtick | questionMark | memberOp | safeMemberOp | spreadMemberOp | specify | compute |
         sumOp | differenceOp | productOp | quotientOp | remainderOp | powerOp | scaleOp |
-        incrementOp | decrementOp | spanOp | measureOp | entryOp | notOp | andOp | orOp | complementOp | intersectionOp | unionOp
+        incrementOp | decrementOp | spanOp | measureOp | entryOp | notOp | andOp | orOp | complementOp | intersectionOp | unionOp |
+        identicalOp | equalOp | notEqualOp | smallerOp | largerOp | smallAsOp | largeAsOp | compareOp
         extends TokenType(string) {}
 
 "A comma: ‘`,`’"
@@ -375,3 +376,26 @@ shared object intersectionOp extends SymbolType("intersectionOp") {}
 "A union operator: ‘`|`’"
 shared object unionOp extends SymbolType("unionOp") {}
 
+"An identity test operator: ‘`===`’"
+shared object identicalOp extends SymbolType("identicalOp") {}
+
+"An equality test operator: ‘`==`’"
+shared object equalOp extends SymbolType("equalOp") {}
+
+"A non-equality test-operator: ‘`!=`’"
+shared object notEqualOp extends SymbolType("notEqualOp") {}
+
+"A smaller-as operator: ‘`<`’"
+shared object smallerOp extends SymbolType("smallerOp") {}
+
+"A larger-as operator: ‘`>`’"
+shared object largerOp extends SymbolType("largerOp") {}
+
+"An as-small-as operator: ‘`<=`’"
+shared object smallAsOp extends SymbolType("smallAsOp") {}
+
+"An as-large-as operator: ‘`>=`’"
+shared object largeAsOp extends SymbolType(">=") {}
+
+"A compare operator: ‘`<=>`’"
+shared object compareOp extends SymbolType("compareOp") {}
