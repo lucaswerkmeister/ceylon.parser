@@ -271,7 +271,9 @@ shared abstract class SymbolType(String string)
         backtick | questionMark | memberOp | safeMemberOp | spreadMemberOp | specify | compute |
         sumOp | differenceOp | productOp | quotientOp | remainderOp | powerOp | scaleOp |
         incrementOp | decrementOp | spanOp | measureOp | entryOp | notOp | andOp | orOp | complementOp | intersectionOp | unionOp |
-        identicalOp | equalOp | notEqualOp | smallerOp | largerOp | smallAsOp | largeAsOp | compareOp
+        identicalOp | equalOp | notEqualOp | smallerOp | largerOp | smallAsOp | largeAsOp | compareOp |
+        addAssignOp | subtractAssignOp | multiplyAssignOp | divideAssignOp | remainderAssignOp |
+        andAssignOp | orAssignOp | complementAssignOp | intersectAssignOp | unionAssignOp
         extends TokenType(string) {}
 
 "A comma: ‘`,`’"
@@ -399,3 +401,33 @@ shared object largeAsOp extends SymbolType(">=") {}
 
 "A compare operator: ‘`<=>`’"
 shared object compareOp extends SymbolType("compareOp") {}
+
+"An add-assign operator: ‘`+=`’"
+shared object addAssignOp extends SymbolType("addAssignOp") {}
+
+"A subtract-assign operator: ‘`-=`’"
+shared object subtractAssignOp extends SymbolType("subtractAssignOp") {}
+
+"A multiply-assign operator: ‘`*=`’"
+shared object multiplyAssignOp extends SymbolType("multiplyAssignOp") {}
+
+"A divide-assign operator: ‘`/=`’"
+shared object divideAssignOp extends SymbolType("divideAssignOp") {}
+
+"A remainder-assign operator: ‘`%=`’"
+shared object remainderAssignOp extends SymbolType("remainderAssignOp") {}
+
+"An and-assign operator: ‘`&&=`’"
+shared object andAssignOp extends SymbolType("andAssignOp") {}
+
+"An or-assign operator: ‘`||=`’"
+shared object orAssignOp extends SymbolType("orAssignOp") {}
+
+"A complement-assign operator: ‘`~=`’"
+shared object complementAssignOp extends SymbolType("complementAssignOp") {}
+
+"An intersect-assign operator: ‘`&=`’"
+shared object intersectAssignOp extends SymbolType("intersectAssignOp") {}
+
+"A union-assign operator: ‘`|=`’"
+shared object unionAssignOp extends SymbolType("unionAssignOp") {}
