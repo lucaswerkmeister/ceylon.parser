@@ -107,7 +107,8 @@ shared class CeylonLexer(CharacterStream characters) {
                     return token(multiComment, text.string);
                 }
                 case ('=') {
-                    // TODO /=
+                    characters.consume(2);
+                    return token(divideAssignOp, "/=");
                 }
                 else {
                     return charToken(quotientOp, '/');
@@ -818,7 +819,8 @@ shared class CeylonLexer(CharacterStream characters) {
                     return token(spreadMemberOp, "*.");
                 }
                 case ('=') {
-                    // TODO *=
+                    characters.consume(2);
+                    return token(multiplyAssignOp, "*=");
                 }
                 case ('*') {
                     characters.consume(2);
@@ -850,7 +852,8 @@ shared class CeylonLexer(CharacterStream characters) {
             case ('+') {
                 switch (characters.peek(1))
                 case ('=') {
-                    // TODO +=
+                    characters.consume(2);
+                    return token(addAssignOp, "+=");
                 }
                 case ('+') {
                     characters.consume(2);
@@ -863,7 +866,8 @@ shared class CeylonLexer(CharacterStream characters) {
             case ('-') {
                 switch (characters.peek(1))
                 case ('=') {
-                    // TODO -=
+                    characters.consume(2);
+                    return token(subtractAssignOp, "-=");
                 }
                 case ('-') {
                     characters.consume(2);
@@ -879,17 +883,14 @@ shared class CeylonLexer(CharacterStream characters) {
             }
             case ('%') {
                 if (characters.peek(1) == '=') {
-                    // TODO %=
+                    characters.consume(2);
+                    return token(remainderAssignOp, "%=");
                 } else {
                     return charToken(remainderOp, '%');
                 }
             }
             case ('^') {
-                if (characters.peek(1) == '=') {
-                    // TODO ^=
-                } else {
-                    return charToken(powerOp, '^');
-                }
+                return charToken(powerOp, '^');
             }
             case ('!') {
                 if (characters.peek(1) == '=') {
@@ -900,24 +901,47 @@ shared class CeylonLexer(CharacterStream characters) {
                 }
             }
             case ('&') {
-                if (characters.peek(1) == '&') {
+                switch (characters.peek(1))
+                case ('&') {
+                    if (characters.peek(2) == '=') {
+                        characters.consume(3);
+                        return token(andAssignOp, "&&=");
+                    } else {
+                        characters.consume(2);
+                        return token(andOp, "&&");
+                    }
+                }
+                case ('=') {
                     characters.consume(2);
-                    return token(andOp, "&&");
-                } else {
+                    return token(intersectAssignOp, "&=");
+                }
+                else {
                     return charToken(intersectionOp, '&');
                 }
             }
             case ('|') {
-                if (characters.peek(1) == '|') {
+                switch (characters.peek(1))
+                case ('|') {
+                    if (characters.peek(2) == '=') {
+                        characters.consume(3);
+                        return token(orAssignOp, "||=");
+                    } else {
+                        characters.consume(2);
+                        return token(orOp, "||");
+                    }
+                }
+                case ('=') {
                     characters.consume(2);
-                    return token(orOp, "||");
-                } else {
+                    return token(unionAssignOp, "|=");
+                }
+                else {
                     return charToken(unionOp, '|');
                 }
             }
             case ('~') {
                 if (characters.peek(1) == '=') {
-                    // TODO ~=
+                    characters.consume(2);
+                    return token(complementAssignOp, "~=");
                 } else {
                     return charToken(complementOp, '~');
                 }
