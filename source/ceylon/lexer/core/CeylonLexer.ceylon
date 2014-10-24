@@ -52,7 +52,8 @@
    
    [Ceylon1.1]: http://ceylon-lang.org/documentation/1.1/spec/
    [Unicode7]: http://www.unicode.org/versions/Unicode7.0.0/"""
-shared class CeylonLexer(CharacterStream characters) {
+shared class CeylonLexer(CharacterStream characters)
+        satisfies TokenSource {
     
     value terminator = '\{PRIVATE USE ONE}';
     
@@ -60,7 +61,7 @@ shared class CeylonLexer(CharacterStream characters) {
      is depleted.
      
      (There is no `EOF` token.)"
-    shared Token? nextToken() {
+    shared actual Token? nextToken() {
         while (characters.peek() != terminator) {
             variable Character next;
             switch (next = characters.peek())
