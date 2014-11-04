@@ -41,6 +41,11 @@ import ceylon.lexer.core {
     multiplyAssignOp,
     notEqualOp,
     notOp,
+    openCharacterLiteral,
+    openMultiComment,
+    openStringLiteral,
+    openStringPart,
+    openVerbatimStringLiteral,
     orAssignOp,
     orOp,
     powerOp,
@@ -69,6 +74,8 @@ import ceylon.lexer.core {
     uidentifier,
     unionAssignOp,
     unionOp,
+    unknownCharacter,
+    unknownEscape,
     verbatimStringLiteral,
     whitespace
 }
@@ -338,6 +345,59 @@ shared class CeylonLexerTest() {
         "~="->complementAssignOp,
         "&="->intersectAssignOp,
         "|="->unionAssignOp);
+    
+    test
+    shared void unknownCharacters()
+            => multipleTokens("Unknown characters",
+        "\{NULL}"->unknownCharacter,
+        "\{BACKSPACE}"->unknownCharacter,
+        "hello"->lidentifier,
+        "\{ESCAPE}"->unknownCharacter);
+    
+    test
+    shared void unknownEscapes()
+            => multipleTokens("Unknown escapes",
+        "\\"->unknownEscape, "escape"->lidentifier,
+        "\\"->unknownEscape, "ESCAPE"->uidentifier);
+    
+    test
+    shared void openDoubleQuotes()
+            => multipleTokens("Unterminated string literal",
+        "hello"->lidentifier,
+        " "->whitespace,
+        "+"->sumOp,
+        "\"unterminated\\\""->openStringLiteral);
+    
+    test
+    shared void openTripleDoubleQuotes()
+            => multipleTokens("Unterminated verbatim string literal",
+        "hello"->lidentifier,
+        " "->whitespace,
+        "+"->sumOp,
+        "\"\"\"unterminated\"\""->openVerbatimStringLiteral);
+    
+    test
+    shared void openDoubleBackticks()
+            => multipleTokens("Unterminated string part",
+        "\"hello\`\`"->stringStart,
+        "hello"->lidentifier,
+        "\`\`world!\`"->openStringPart);
+    
+    test
+    shared void openSingleQuote()
+            => multipleTokens("Unterminated character literal",
+        "hello"->lidentifier,
+        " "->whitespace,
+        "+"->sumOp,
+        "\'hello\\\'"->openCharacterLiteral);
+    
+    test
+    shared void openSlashStar()
+            => multipleTokens("Unterminated multi comment",
+        "hello"->lidentifier,
+        " "->whitespace,
+        "+"->sumOp,
+        "/* unterminated /* multi */ comment"->openMultiComment);
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
