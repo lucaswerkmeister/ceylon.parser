@@ -1,5 +1,5 @@
 shared abstract class TokenType(string)
-        of IgnoredType | IdentifierType | LiteralType | KeywordType | SymbolType {
+        of IgnoredType | IdentifierType | LiteralType | KeywordType | SymbolType | ErrorType {
     shared actual String string;
 }
 
@@ -431,3 +431,40 @@ shared object intersectAssignOp extends SymbolType("intersectAssignOp") {}
 
 "A union-assign operator: ‘`|=`’"
 shared object unionAssignOp extends SymbolType("unionAssignOp") {}
+
+"An erroneous token."
+shared abstract class ErrorType(String string)
+        of UnknownType | OpenType
+        extends TokenType(string) {}
+
+"A token where the lexer does not understand a character,
+ but is able to proceed past it."
+shared abstract class UnknownType(String string)
+        of unknownCharacter | unknownEscape
+        extends ErrorType(string) {}
+
+"A character that cannot begin any token."
+shared object unknownCharacter extends UnknownType("unknownCharacter") {}
+
+"A character other than lower-or uppercase I after a backslash."
+shared object unknownEscape extends UnknownType("unknownEscape") {}
+
+"A token that was not terminated. The token stream ends after this token."
+shared abstract class OpenType(String string)
+        of openStringLiteral | openStringPart | openVerbatimStringLiteral | openCharacterLiteral | openMultiComment
+        extends ErrorType(string) {}
+
+"An unterminated [[stringLiteral]] or [[stringStart]]."
+shared object openStringLiteral extends OpenType("openStringLiteral") {}
+
+"An unterminated [[stringMid]] or [[stringEnd]]."
+shared object openStringPart extends OpenType("openStringPart") {}
+
+"An unterminated [[verbatimStringLiteral]]."
+shared object openVerbatimStringLiteral extends OpenType("openVerbatimStringLiteral") {}
+
+"An unterminated [[characterLiteral]]."
+shared object openCharacterLiteral extends OpenType("openCharacterLiteral") {}
+
+"An unterminated [[multiComment]]."
+shared object openMultiComment extends OpenType("openMultiComment") {}
