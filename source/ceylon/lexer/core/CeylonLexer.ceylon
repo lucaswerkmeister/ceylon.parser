@@ -98,8 +98,8 @@ shared class CeylonLexer(CharacterStream characters)
                             characters.consume(2);
                             continue;
                         } else if (next == terminator) {
-                            // TODO unterminated multi comment – error?
-                            return token(multiComment, text.string);
+                            // TODO option to lex this as regular multi comment?
+                            return token(openMultiComment, text.string);
                         } else {
                             text.appendCharacter(next);
                             characters.consume();
@@ -179,7 +179,10 @@ shared class CeylonLexer(CharacterStream characters)
                     return token(uidentifier, text.string);
                 }
                 else {
-                    // TODO error
+                    // unknown escape, consume only the backslash
+                    // TODO should we consume the following character? what does the RedHat lexer do?
+                    characters.consume();
+                    return token(unknownEscape, "\\");
                 }
             }
             case ('"') {
@@ -196,7 +199,7 @@ shared class CeylonLexer(CharacterStream characters)
                         characters.consume();
                     }
                     if (next == terminator) {
-                        // TODO error
+                        return token(openVerbatimStringLiteral, text.string);
                     } else {
                         // next three characters are """
                         if (characters.peek(3) == '"') {
@@ -228,7 +231,7 @@ shared class CeylonLexer(CharacterStream characters)
                         }
                     }
                     if (next == terminator) {
-                        // TODO error
+                        return token(openStringLiteral, text.string);
                     } else {
                         if (next == '"') {
                             text.appendCharacter('"');
@@ -259,7 +262,7 @@ shared class CeylonLexer(CharacterStream characters)
                         }
                     }
                     if (next == terminator) {
-                        // TODO error
+                        return token(openStringPart, text.string);
                     } else {
                         if (next == '"') {
                             text.appendCharacter('"');
@@ -290,7 +293,7 @@ shared class CeylonLexer(CharacterStream characters)
                     }
                 }
                 if (next == terminator) {
-                    // TODO error
+                    return token(openCharacterLiteral, text.string);
                 } else {
                     text.appendCharacter('\'');
                     characters.consume();
@@ -983,7 +986,8 @@ shared class CeylonLexer(CharacterStream characters)
                         }
                         return token(whitespace, text.string);
                     } else {
-                        // TODO error
+                        characters.consume();
+                        return token(unknownCharacter, next.string);
                     }
                 }
             }
