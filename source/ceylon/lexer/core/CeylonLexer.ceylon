@@ -180,7 +180,6 @@ shared class CeylonLexer(CharacterStream characters)
                 }
                 else {
                     // unknown escape, consume only the backslash
-                    // TODO should we consume the following character? what does the RedHat lexer do?
                     characters.consume();
                     return token(unknownEscape, "\\");
                 }
