@@ -239,6 +239,11 @@ shared class CeylonLexer(CharacterStream characters)
                         } else {
                             text.append("\`\`");
                             characters.consume(2);
+                            if (characters.peek() == '`') {
+                                // String parts can end in a backtick, see ceylon-spec#686
+                                text.append("`");
+                                characters.consume();
+                            }
                             return token(stringStart, text.string);
                         }
                     }
@@ -270,6 +275,11 @@ shared class CeylonLexer(CharacterStream characters)
                         } else {
                             text.append("\`\`");
                             characters.consume(2);
+                            if (characters.peek() == '`') {
+                                // String parts can end in a backtick, see ceylon-spec#686
+                                text.append("`");
+                                characters.consume();
+                            }
                             return token(stringMid, text.string);
                         }
                     }
