@@ -398,6 +398,15 @@ shared class CeylonLexerTest() {
         " "->whitespace,
         "+"->sumOp,
         "/* unterminated /* multi */ comment"->openMultiComment);
+
+    test
+    shared void backtickInStringTemplate()
+            => multipleTokens("Backtick at the end of string start or mid",
+        "\"String start\`\`\`"->stringStart,
+        "id1"->lidentifier,
+        "\`\`\`String mid\`\`\`"->stringMid,
+        "id2"->lidentifier,
+        "\`\`\`String end\""->stringEnd);
     
     void singleToken(String input, TokenType expectedType, String? message = null) {
         value lexer = CeylonLexer(StringCharacterStream(input));
