@@ -1,4 +1,4 @@
-<project name="Ceylon Lexer" basedir="." default="test">
+<project name="Ceylon Parser" basedir="." default="test">
     
     <property file="build.properties"/>
     <property name="ceylon.verbosity" value="false"/>
@@ -28,6 +28,7 @@
     
     <moduleset id="modules.source.core">
         <module name="ceylon.lexer.core"/>
+        <module name="ceylon.parser.core"/>
     </moduleset>
     
     <moduleset id="modules.source">
@@ -36,6 +37,7 @@
     
     <moduleset id="modules.test.core">
         <module name="test.ceylon.lexer.core"/>
+        <module name="test.ceylon.parser.core"/>
     </moduleset>
     
     <moduleset id="modules.test">
@@ -54,7 +56,7 @@
     </target>
     
     <target name="compile-core"
-            description="Compiles the Ceylon Lexer core module">
+            description="Compiles the Ceylon Parser core modules">
         <ceylon-compile executable="${ceylon.executable}"
             verbose="${ceylon.verbosity}"
             encoding="UTF-8"
@@ -65,7 +67,7 @@
     </target>
     
     <target name="compile-source"
-            description="Compiles the Ceylon Lexer source modules">
+            description="Compiles the Ceylon Parser source modules">
         <ceylon-compile executable="${ceylon.executable}"
             verbose="${ceylon.verbosity}"
             encoding="UTF-8"
@@ -76,7 +78,7 @@
     </target>
     
     <target name="compile-test-core" depends="compile-core"
-            description="Compiles the Ceylon Lexer core module">
+            description="Compiles the Ceylon Parser core modules">
         <ceylon-compile executable="${ceylon.executable}"
             verbose="${ceylon.verbosity}"
             encoding="UTF-8"
@@ -87,7 +89,7 @@
     </target>
     
     <target name="compile-test" depends="compile-source"
-            description="Compiles the Ceylon Lexer test modules">
+            description="Compiles the Ceylon Parser test modules">
         <ceylon-compile executable="${ceylon.executable}"
             verbose="${ceylon.verbosity}"
             encoding="UTF-8"
@@ -98,7 +100,7 @@
     </target>
     
     <target name="compile"
-            description="Compiles all the Ceylon Lexer modules">
+            description="Compiles all the Ceylon Parser modules">
         <ceylon-compile executable="${ceylon.executable}"
             verbose="${ceylon.verbosity}"
             encoding="UTF-8"
@@ -109,21 +111,21 @@
     </target>
     
     <target name="test-core" depends="compile-test-core"
-            description="Tests the Ceylon Lexer core module">
+            description="Tests the Ceylon Parser core modules">
         <ceylon-test>
             <moduleset refid="modules.test.core"/>
         </ceylon-test>
     </target>
     
     <target name="test" depends="compile"
-            description="Tests the Ceylon Lexer">
+            description="Tests the Ceylon Parser">
         <ceylon-test>
             <moduleset refid="modules.test"/>
         </ceylon-test>
     </target>
 
     <target name="doc" 
-            description="Documents the Ceylon Lexer modules">
+            description="Documents the Ceylon Parser modules">
         <ceylon-doc executable="${ceylon.executable}"
             includesourcecode="true"
             nomtimecheck="true"
@@ -137,7 +139,7 @@
     </target>
     
     <target name="publish" depends="compile-source"
-            description="Copies the Ceylon Lexer modules to the user's repository">
+            description="Copies the Ceylon Parser modules to the user's repository">
         <copy todir="${ceylon.repo.dir}" overwrite="true">
             <fileset dir="${out.repo}">
                 <include name="ceylon/lexer/**"/>
