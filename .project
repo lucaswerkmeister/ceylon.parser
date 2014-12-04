@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ceylon.lexer</name>
+	<name>ceylon.parser</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -14,16 +14,8 @@
 			<name>com.redhat.ceylon.eclipse.ui.ceylonBuilder</name>
 			<arguments>
 				<dictionary>
-					<key>compileJs</key>
-					<value>true</value>
-				</dictionary>
-				<dictionary>
 					<key>explodeModules</key>
 					<value>true</value>
-				</dictionary>
-				<dictionary>
-					<key>systemRepo</key>
-					<value></value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
