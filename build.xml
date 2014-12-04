@@ -110,18 +110,19 @@
         </ceylon-compile>
     </target>
     
-    <target name="test-core" depends="compile-test-core"
-            description="Tests the Ceylon Parser core modules">
-        <ceylon-test>
-            <moduleset refid="modules.test.core"/>
-        </ceylon-test>
-    </target>
-    
     <target name="test" depends="compile"
             description="Tests the Ceylon Parser">
+<!--
         <ceylon-test>
             <moduleset refid="modules.test"/>
         </ceylon-test>
+-->
+        <exec executable="ceylon-release">
+            <arg value="test"/>
+            <arg value="--version=1.1.0"/>
+            <arg value="test.ceylon.lexer.core"/>
+            <arg value="test.ceylon.parser.core"/>
+        </exec>
     </target>
 
     <target name="doc" 
