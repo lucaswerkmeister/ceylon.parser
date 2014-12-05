@@ -16,7 +16,7 @@ shared class TokenSourceStream(TokenSource source)
     LazySequence<Token> tokens = LazySequence(source);
     
     shared actual class Marker()
-             extends super.Marker() {
+            extends super.Marker() {
         shared actual Integer index = outer.index;
         shared actual void destroy(Throwable? error) {} // do nothing
     }
@@ -29,8 +29,8 @@ shared class TokenSourceStream(TokenSource source)
 }
 
 class LazySequence<Element>(Iterator<Element> elements)
-        satisfies {Element*} 
-        given Element satisfies Object{
+        satisfies {Element*}
+        given Element satisfies Object {
     
     MutableList<Element> buffer = ArrayList<Element>();
     

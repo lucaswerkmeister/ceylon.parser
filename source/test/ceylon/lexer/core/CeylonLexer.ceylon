@@ -398,7 +398,7 @@ shared class CeylonLexerTest() {
         " "->whitespace,
         "+"->sumOp,
         "/* unterminated /* multi */ comment"->openMultiComment);
-
+    
     test
     shared void backtickInStringTemplate()
             => multipleTokens("Backtick at the end of string start or mid",
