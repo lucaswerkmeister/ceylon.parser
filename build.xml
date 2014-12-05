@@ -147,5 +147,12 @@
             </fileset>
         </copy>
     </target>
+    
+    <target name="format"
+            description="Formats the source code">
+        <ceylon-run module="ceylon.formatter/1.1.0">
+            <arg value="source"/>
+        </ceylon-run>
+    </target>
 
 </project>
