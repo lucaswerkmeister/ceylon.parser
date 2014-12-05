@@ -6,7 +6,9 @@ import ceylon.ast.core {
     ...
 }
 import ceylon.collection {
-    HashSet
+    HashSet,
+    LinkedList,
+    MutableList
 }
 
 alias Tokens => Set<TokenType>;
@@ -22,40 +24,68 @@ shared class CeylonParser(TokenStream tokens) {
     
     // TODO attach tokens?
     
-    shared BaseType? baseType() {
-        if (exists id = uidentifier()) {
-            // TODO type arguments
-            return BaseType(TypeNameWithTypeArguments(id));
+    shared BaseType baseType() {
+        value nextTokenType = tokens.peek()?.type else uidentifierType;
+        if (nextTokenType == uidentifierType) {
+            value id = uidentifier();
+            TypeArguments? typeArguments;
+            if (exists smallerOpToken = tokens.peek(), smallerOpToken.type == smallerOp) {
+                // type arguments
+                tokens.consume();
+                MutableList<Type> argumentTypes = LinkedList<Type>();
+                // TODO use-site variance
+                argumentTypes.add(type());
+                while (exists separatorToken = tokens.peek()) {
+                    switch (separatorToken.type)
+                    case (comma) {
+                        tokens.consume();
+                        argumentTypes.add(type());
+                    }
+                    case (largerOp) {
+                        tokens.consume();
+                        break;
+                    }
+                    else {
+                        // TODO error: expected , or > in type argument list
+                    }
+                }
+                assert (nonempty argTypes = argumentTypes.map(TypeArgument).sequence());
+                typeArguments = TypeArguments(argTypes);
+            } else {
+                typeArguments = null;
+            }
+            return BaseType(TypeNameWithTypeArguments(id, typeArguments));
         } else {
-            return null;
+            // TODO mark as fake
+            return BaseType(TypeNameWithTypeArguments(UIdentifier("Nothing")));
         }
     }
     
-    shared MainType? mainType() {
-        if (exists token = tokens.peek()) {
-            if (token.type in begin_unionableType) { return unionableType(); } else { return null; }
-        } else { return null; }
+    shared MainType mainType() {
+        value nextTokenType = tokens.peek()?.type else uidentifierType;
+        if (nextTokenType in begin_unionableType) { return unionableType(); }
+        else { /* default */ return unionableType(); }
     }
     
-    shared PrimaryType? primaryType() {
-        if (exists token = tokens.peek()) {
-            if (token.type in begin_simpleType) { return simpleType(); } else { return null; }
-        } else { return null; }
+    shared PrimaryType primaryType() {
+        value nextTokenType = tokens.peek()?.type else uidentifierType;
+        if (nextTokenType in begin_simpleType) { return simpleType(); }
+        else { /* default */ return simpleType(); }
     }
     
-    shared SimpleType? simpleType() {
-        if (exists token = tokens.peek()) {
-            if (token.type in begin_baseType) { return baseType(); } else { return null; }
-        } else { return null; }
+    shared SimpleType simpleType() {
+        value nextTokenType = tokens.peek()?.type else uidentifierType;
+        if (nextTokenType in begin_baseType) { return baseType(); }
+        else { /* default */ return baseType(); }
     }
     
-    shared Type? type() {
-        if (exists token = tokens.peek()) {
-            if (token.type in begin_mainType) { return mainType(); } else { return null; }
-        } else { return null; }
+    shared Type type() {
+        value nextTokenType = tokens.peek()?.type else uidentifierType;
+        if (nextTokenType in begin_mainType) { return mainType(); }
+        else { /* default */ return mainType(); }
     }
     
-    shared UIdentifier? uidentifier() {
+    shared UIdentifier uidentifier() {
         if (exists token = tokens.peek(), token.type == uidentifierType) {
             tokens.consume();
             if (token.text.startsWith("\\")) {
@@ -64,13 +94,14 @@ shared class CeylonParser(TokenStream tokens) {
                 return UIdentifier(token.text);
             }
         } else {
-            return null;
+            // TODO mark as fake
+            return UIdentifier("Nothing");
         }
     }
     
-    shared UnionableType? unionableType() {
-        if (exists token = tokens.peek()) {
-            if (token.type in begin_primaryType) { return primaryType(); } else { return null; }
-        } else { return null; }
+    shared UnionableType unionableType() {
+        value nextTokenType = tokens.peek()?.type else uidentifierType;
+        if (nextTokenType in begin_primaryType) { return primaryType(); }
+        else { /* default */ return primaryType(); }
     }
 }
