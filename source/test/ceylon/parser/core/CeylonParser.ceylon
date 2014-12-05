@@ -16,7 +16,8 @@ import ceylon.lexer.core {
     TokenSourceStream
 }
 import ceylon.language.meta.model {
-    Class
+    Class,
+    ClassModel
 }
 
 shared class CeylonParserTest() {
@@ -33,18 +34,28 @@ shared class CeylonParserTest() {
         };
     }
     
-    void testParse(String code, Class<Node> nodeType) {
-        value name = nodeType.declaration.name;
-        assert (exists char = name.first);
-        value lName = String { char.lowercased, *name.rest };
-        assert (exists ceylonParserMethod = `CeylonParser`.getMethod<CeylonParser,Node?,[]>(lName));
-        assert (exists redhatParseFunction = `package ceylon.ast.redhat`.getFunction("compile``name``")?.apply<Node?,[String]>());
-        assertParseEquals(code, ceylonParserMethod, redhatParseFunction);
+    void testParse(Class<Node> abstractType, <String->Class<Node>>* samples) {
+        for (code->actualType in samples) {
+            
+            value atName = actualType.declaration.name;
+            assert (exists redhatParseFunction = `package ceylon.ast.redhat`.getFunction("compile``atName``")?.apply<Node?,[String]>());
+            
+            variable ClassModel<Anything>? currentType = actualType;
+            while (is Class<Node> ct = currentType, ct != abstractType) {
+                value name = ct.declaration.name;
+                assert (exists char = name.first);
+                value lName = String { char.lowercased, *name.rest };
+                assert (exists ceylonParserMethod = `CeylonParser`.getMethod<CeylonParser,Node?,[]>(lName));
+                assertParseEquals(code, ceylonParserMethod, redhatParseFunction);
+                
+                currentType = ct.extendedType;
+            }
+        }
     }
     
     test
-    shared void baseType_string() => testParse("String", `BaseType`);
-    
-    test
-    shared void baseType_stringWithSpaces() => testParse("  String  ", `BaseType`);
+    shared void types()
+            => testParse(`Type`,
+        "String"->`BaseType`,
+        "  String  "->`BaseType`);
 }
