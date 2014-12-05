@@ -43,33 +43,52 @@ shared class CeylonParser(TokenStream tokens) {
     
     shared MainType mainType() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
-        if (nextTokenType in begin_unionableType) { return unionableType(); }
-        else { /* default */ return unionableType(); }
+        if (nextTokenType in begin_unionableType) {
+            return unionableType();
+        } else {
+            // default
+            return unionableType();
+        }
     }
     
     shared PrimaryType primaryType() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
-        if (nextTokenType in begin_simpleType) { return simpleType(); }
-        else { /* default */ return simpleType(); }
+        if (nextTokenType in begin_simpleType) {
+            return simpleType();
+        } else {
+            // default
+            return simpleType();
+        }
     }
     
     shared SimpleType simpleType() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
-        if (nextTokenType in begin_baseType) { return baseType(); }
-        else { /* default */ return baseType(); }
+        if (nextTokenType in begin_baseType) {
+            return baseType();
+        } else {
+            // default
+            return baseType();
+        }
     }
     
     shared Type type() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
-        if (nextTokenType in begin_mainType) { return mainType(); }
-        else { /* default */ return mainType(); }
+        if (nextTokenType in begin_mainType) {
+            return mainType();
+        } else {
+            // default
+            return mainType();
+        }
     }
     
     shared TypeArgument typeArgument() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
         Variance? var;
-        if (nextTokenType in { inKw, outKw }) { var = variance(); }
-        else { var = null; }
+        if (nextTokenType in { inKw, outKw }) {
+            var = variance();
+        } else {
+            var = null;
+        }
         return TypeArgument(type(), var);
     }
     
@@ -116,15 +135,25 @@ shared class CeylonParser(TokenStream tokens) {
     
     shared UnionableType unionableType() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
-        if (nextTokenType in begin_primaryType) { return primaryType(); }
-        else { /* default */ return primaryType(); }
+        if (nextTokenType in begin_primaryType) {
+            return primaryType();
+        } else {
+            // default
+            return primaryType();
+        }
     }
     
     shared Variance variance() {
         value nextTokenType = tokens.peek()?.type else whitespace;
         switch (nextTokenType)
-        case (outKw) { tokens.consume(); return OutModifier(); }
-        case (inKw) { tokens.consume(); return InModifier(); }
+        case (outKw) {
+            tokens.consume();
+            return OutModifier();
+        }
+        case (inKw) {
+            tokens.consume();
+            return InModifier();
+        }
         else {
             // TODO mark as fake
             return OutModifier();
