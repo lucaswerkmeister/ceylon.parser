@@ -57,5 +57,7 @@ shared class CeylonParserTest() {
     shared void types()
             => testParse(`Type`,
         "String"->`BaseType`,
-        "  String  "->`BaseType`);
+        "  String  "->`BaseType`,
+        "Iterable<String>"->`BaseType`,
+        "Iterable<String,Nothing>"->`BaseType`);
 }
