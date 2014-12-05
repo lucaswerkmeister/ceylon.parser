@@ -60,7 +60,9 @@ shared class CeylonParserTest() {
         "  String  "->`BaseType`,
         "Iterable<String>"->`BaseType`,
         "Iterable<String,Nothing>"->`BaseType`,
-        "JIterable<out JString>"->`BaseType`);
+        "JIterable<out JString>"->`BaseType`,
+        "String?"->`OptionalType`,
+        "Iterable<Integer, Nothing?>??"->`OptionalType`);
     
     test
     shared void typeArguments()
