@@ -54,10 +54,21 @@ shared class CeylonParserTest() {
     }
     
     test
-    shared void types()
+    shared void type()
             => testParse(`Type`,
         "String"->`BaseType`,
         "  String  "->`BaseType`,
         "Iterable<String>"->`BaseType`,
-        "Iterable<String,Nothing>"->`BaseType`);
+        "Iterable<String,Nothing>"->`BaseType`,
+        "JIterable<out JString>"->`BaseType`);
+    
+    test
+    shared void typeArguments()
+            => testParse(`TypeArguments`,
+        "<String,Nothing>"->`TypeArguments`,
+        "<String, out Nothing, in Anything>"->`TypeArguments`);
+    
+    test
+    shared void variance()
+            => testParse(`Variance`, "in"->`Variance`, "out"->`Variance`);
 }
