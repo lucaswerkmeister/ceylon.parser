@@ -51,14 +51,40 @@ shared class CeylonParser(TokenStream tokens) {
         }
     }
     
+    shared OptionalType optionalType() {
+        value ret = primaryType();
+        if (is OptionalType ret) {
+            return ret;
+        } else {
+            // TODO error expected optional type
+            return OptionalType(ret);
+        }
+    }
+    
+    shared OptionalType continue_optionalType(PrimaryType definiteType) {
+        if ((tokens.peek()?.type else whitespace) == questionMark) {
+            tokens.consume();
+        } else {
+            // TODO error expected ?
+        }
+        return OptionalType(definiteType);
+    }
+    
     shared PrimaryType primaryType() {
+        variable PrimaryType ret;
         value nextTokenType = tokens.peek()?.type else uidentifierType;
         if (nextTokenType in begin_simpleType) {
-            return simpleType();
+            ret = simpleType();
         } else {
             // default
-            return simpleType();
+            ret = simpleType();
         }
+        while (exists followingToken = tokens.peek()) {
+            switch (followingToken.type)
+            case (questionMark) { ret = continue_optionalType(ret); }
+            else { break; }
+        }
+        return ret;
     }
     
     shared SimpleType simpleType() {
