@@ -1,3 +1,4 @@
+
 import ceylon.lexer.core {
     uidentifierType=uidentifier,
     ...
@@ -12,6 +13,8 @@ import ceylon.collection {
 }
 
 alias Tokens => Set<TokenType>;
+
+shared Key<Token[]> tokensKey = ScopedKey<Token[]>(`class CeylonParser`, "tokens");
 
 shared class CeylonParser(TokenStream tokens) {
     
@@ -62,12 +65,16 @@ shared class CeylonParser(TokenStream tokens) {
     }
     
     shared OptionalType continue_optionalType(PrimaryType definiteType) {
+        Token? token;
         if ((tokens.peek()?.type else whitespace) == questionMark) {
-            tokens.consume();
+            token = tokens.nextToken();
         } else {
             // TODO error expected ?
+            token = null;
         }
-        return OptionalType(definiteType);
+        value ret = OptionalType(definiteType);
+        ret.put(tokensKey, emptyOrSingleton(token));
+        return ret;
     }
     
     shared PrimaryType primaryType() {
@@ -120,6 +127,7 @@ shared class CeylonParser(TokenStream tokens) {
     
     shared TypeArguments typeArguments() {
         if (exists opening = tokens.peek(), opening.type == smallerOp) {
+            value ownTokens = LinkedList { opening };
             tokens.consume();
             MutableList<TypeArgument> typeArgs = LinkedList<TypeArgument>();
             typeArgs.add(typeArgument());
@@ -127,10 +135,12 @@ shared class CeylonParser(TokenStream tokens) {
                 switch (separatorToken.type)
                 case (comma) {
                     tokens.consume();
+                    ownTokens.add(separatorToken);
                     typeArgs.add(typeArgument());
                 }
                 case (largerOp) {
                     tokens.consume();
+                    ownTokens.add(separatorToken);
                     break;
                 }
                 else {
@@ -138,7 +148,9 @@ shared class CeylonParser(TokenStream tokens) {
                 }
             }
             assert (nonempty typeArgsSeq = typeArgs.sequence());
-            return TypeArguments(typeArgsSeq);
+            value ret = TypeArguments(typeArgsSeq);
+            ret.put(tokensKey, ownTokens.sequence());
+            return ret;
         } else {
             // TODO error expected <
             return TypeArguments([typeArgument()]);
@@ -148,11 +160,14 @@ shared class CeylonParser(TokenStream tokens) {
     shared UIdentifier uidentifier() {
         if (exists token = tokens.peek(), token.type == uidentifierType) {
             tokens.consume();
+            UIdentifier ret;
             if (token.text.startsWith("\\")) {
-                return UIdentifier { token.text[2...]; usePrefix = true; };
+                ret = UIdentifier { token.text[2...]; usePrefix = true; };
             } else {
-                return UIdentifier(token.text);
+                ret = UIdentifier(token.text);
             }
+            ret.put(tokensKey, [token]);
+            return ret;
         } else {
             // TODO mark as fake
             return UIdentifier("Nothing");
@@ -170,15 +185,22 @@ shared class CeylonParser(TokenStream tokens) {
     }
     
     shared Variance variance() {
-        value nextTokenType = tokens.peek()?.type else whitespace;
+        value nextToken = tokens.peek();
+        value nextTokenType = nextToken?.type else whitespace;
         switch (nextTokenType)
         case (outKw) {
             tokens.consume();
-            return OutModifier();
+            assert (exists nextToken);
+            value ret = OutModifier();
+            ret.put(tokensKey, [nextToken]);
+            return ret;
         }
         case (inKw) {
             tokens.consume();
-            return InModifier();
+            assert (exists nextToken);
+            value ret = InModifier();
+            ret.put(tokensKey, [nextToken]);
+            return ret;
         }
         else {
             // TODO mark as fake
