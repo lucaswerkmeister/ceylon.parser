@@ -4,7 +4,8 @@ import ceylon.test {
     assertNotNull
 }
 import ceylon.parser.core {
-    CeylonParser
+    CeylonParser,
+    tokensKey
 }
 import ceylon.ast.core {
     ...
@@ -13,6 +14,7 @@ import ceylon.lexer.core {
     CeylonLexer,
     NonIgnoredTokenSource,
     StringCharacterStream,
+    TokenSourceIterable,
     TokenSourceStream
 }
 import ceylon.language.meta.model {
@@ -23,14 +25,34 @@ import ceylon.language.meta.model {
 shared class CeylonParserTest() {
     
     void assertParseEquals(String code, Node?()(CeylonParser) ceylonParse, Node?(String) redhatParse) {
-        value parser = CeylonParser(TokenSourceStream(NonIgnoredTokenSource(CeylonLexer(StringCharacterStream(code)))));
+        value tokenStream = TokenSourceStream(NonIgnoredTokenSource(CeylonLexer(StringCharacterStream(code))));
+        value tokenStart = tokenStream.Marker();
+        value tokensCount = TokenSourceIterable(tokenStream).size;
+        tokenStream.seek(tokenStart.index); // reset to start
+        value parser = CeylonParser(tokenStream);
         value ceylonParsed = ceylonParse(parser)();
         value redhatParsed = redhatParse(code);
-        assertNotNull(ceylonParsed);
+        assert (exists ceylonParsed);
         assertEquals {
             expected = redhatParsed;
             actual = ceylonParsed;
             message = code;
+        };
+        assertEquals {
+            expected = tokensCount;
+            value actual {
+                variable Integer count = 0;
+                ceylonParsed.visit {
+                    object visitor satisfies Visitor {
+                        shared actual void visitNode(Node that) {
+                            count += that.get(tokensKey)?.size else 0;
+                            that.visitChildren(this);
+                        }
+                    }
+                };
+                return count;
+            }
+            message = "Token count";
         };
     }
     
