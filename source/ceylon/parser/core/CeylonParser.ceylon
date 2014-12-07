@@ -72,9 +72,7 @@ shared class CeylonParser(TokenStream tokens) {
             // TODO error expected ?
             token = null;
         }
-        value ret = OptionalType(definiteType);
-        ret.put(tokensKey, emptyOrSingleton(token));
-        return ret;
+        return withTokens(OptionalType(definiteType), emptyOrSingleton(token));
     }
     
     shared PrimaryType primaryType() {
@@ -148,9 +146,7 @@ shared class CeylonParser(TokenStream tokens) {
                 }
             }
             assert (nonempty typeArgsSeq = typeArgs.sequence());
-            value ret = TypeArguments(typeArgsSeq);
-            ret.put(tokensKey, ownTokens.sequence());
-            return ret;
+            return withTokens(TypeArguments(typeArgsSeq), ownTokens);
         } else {
             // TODO error expected <
             return TypeArguments([typeArgument()]);
@@ -191,20 +187,33 @@ shared class CeylonParser(TokenStream tokens) {
         case (outKw) {
             tokens.consume();
             assert (exists nextToken);
-            value ret = OutModifier();
-            ret.put(tokensKey, [nextToken]);
-            return ret;
+            return withTokens(OutModifier(), [nextToken]);
         }
         case (inKw) {
             tokens.consume();
             assert (exists nextToken);
-            value ret = InModifier();
-            ret.put(tokensKey, [nextToken]);
-            return ret;
+            return withTokens(InModifier(), [nextToken]);
         }
         else {
             // TODO mark as fake
             return OutModifier();
         }
+    }
+    
+    "A helper function to attach tokens to a node
+     and then return it.
+     
+     Intended usage:
+     
+         // within some parse function
+         return withTokens(NodeType(arg1, arg2), tokens);
+         // instead of
+         value ret = NodeType(arg1, arg2);
+         ret.put(tokensKey, tokens.sequence());
+         return ret;"
+    T withTokens<T>(T node, {Token*} tokens)
+            given T satisfies Node {
+        node.put(tokensKey, tokens.sequence());
+        return node;
     }
 }
