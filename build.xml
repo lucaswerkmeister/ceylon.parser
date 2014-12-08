@@ -143,7 +143,7 @@
             description="Copies the Ceylon Parser modules to the user's repository">
         <copy todir="${ceylon.repo.dir}" overwrite="true">
             <fileset dir="${out.repo}">
-                <include name="ceylon/lexer/**"/>
+                <include name="ceylon/**"/>
             </fileset>
         </copy>
     </target>
