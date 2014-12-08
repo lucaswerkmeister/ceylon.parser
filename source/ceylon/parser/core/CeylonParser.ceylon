@@ -14,6 +14,16 @@ import ceylon.collection {
 
 alias Tokens => Set<TokenType>;
 
+"The key for the tokens of a node.
+ 
+ [[CeylonParser]] attaches all tokens that directly belong to a node
+ to that node using this key.
+ The tokens can then be retrieved like this:
+ 
+     assert (exists tokens = node.get(tokensKey));
+ 
+ Every non-ignored token (not whitespace, not comment)
+ is attached to exactly one node."
 shared Key<Token[]> tokensKey = ScopedKey<Token[]>(`class CeylonParser`, "tokens");
 
 shared class CeylonParser(TokenStream tokens) {
@@ -24,8 +34,6 @@ shared class CeylonParser(TokenStream tokens) {
     Tokens begin_primaryType = begin_simpleType;
     Tokens begin_unionableType = begin_primaryType;
     Tokens begin_mainType = begin_unionableType;
-    
-    // TODO attach tokens?
     
     shared BaseType baseType() {
         value nextTokenType = tokens.peek()?.type else uidentifierType;
