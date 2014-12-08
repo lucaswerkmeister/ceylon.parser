@@ -38,20 +38,18 @@ shared class CeylonParserTest() {
             actual = ceylonParsed;
             message = code;
         };
+        variable Integer count = 0;
+        ceylonParsed.visit {
+            object visitor satisfies Visitor {
+                shared actual void visitNode(Node that) {
+                    count += that.get(tokensKey)?.size else 0;
+                    that.visitChildren(this);
+                }
+            }
+        };
         assertEquals {
             expected = tokensCount;
-            value actual {
-                variable Integer count = 0;
-                ceylonParsed.visit {
-                    object visitor satisfies Visitor {
-                        shared actual void visitNode(Node that) {
-                            count += that.get(tokensKey)?.size else 0;
-                            that.visitChildren(this);
-                        }
-                    }
-                };
-                return count;
-            }
+            actual = count;
             message = "Token count";
         };
     }
