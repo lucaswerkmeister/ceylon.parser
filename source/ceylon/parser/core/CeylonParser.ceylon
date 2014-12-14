@@ -1,4 +1,3 @@
-
 import ceylon.lexer.core {
     uidentifierType=uidentifier,
     ...
