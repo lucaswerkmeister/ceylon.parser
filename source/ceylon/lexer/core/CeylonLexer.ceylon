@@ -24,7 +24,7 @@
    > EscapeSequence: "\" (SingleCharacterEscape | "{" CharacterCode "}")
    > ~~~
    > ~~~antlr
-   > CharacterCode: "#" ( HexDigit{4} | HexDigit{8} ) | UnicodeCharacterName
+   > CharacterCode: "#" ( HexDigit{2} | HexDigit{4} | HexDigit{6} ) | UnicodeCharacterName
    > ~~~
    > 
    > Legal Unicode character names are defined by the Unicode specification.
